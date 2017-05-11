@@ -4,6 +4,8 @@ React Component for [china-location](https://github.com/JasonBoy/data_location)
 It uses the simple html select/option tag,
 to use custom UI, install the `china-location` only and make your own UI component.
 
+![demo](https://raw.githubusercontent.com/JasonBoy/react-china-location/master/demo/demo.png)
+
 ## Usage
 
 `npm install china-location react-china-location --save` or

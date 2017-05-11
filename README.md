@@ -50,6 +50,10 @@ class App extends React.Component {
 - list: location data from `china-location`
 - onLocationChange: be notified when user select different option
 
+## Demo
+
+Go to `demo/build` and open `index.html` in your browser.
+
 ## LICENSE
 
 MIT

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ChinaLocationList from 'china-location';
 
 class ChinaLocation extends React.Component {
@@ -68,9 +69,9 @@ class ChinaLocation extends React.Component {
   }
 
   render () {
-
+    const customClass = this.props.customClass ? ' ' + this.props.customClass : '';
     return (
-      <div className="china-location-wrapper">
+      <div className={"china-location-wrapper" + customClass}>
         <select value={this.state.activeProvince} onChange={this.handleProvinceChange}>
           {
             this.state.currentProvinces.map((ele) => {
@@ -96,5 +97,11 @@ class ChinaLocation extends React.Component {
     );
   }
 }
+
+ChinaLocation.propTypes = {
+  onLocationChange: PropTypes.func.isRequired,
+  list: PropTypes.object.isRequired,
+  customClass: PropTypes.string,
+};
 
 export default ChinaLocation;

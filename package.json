@@ -30,6 +30,7 @@
   "homepage": "https://github.com/JasonBoy/react-china-location#readme",
   "dependencies": {
     "china-location": "^0.0.4",
+    "prop-types": "^15.5.9",
     "react": "^15.5.4"
   },
   "devDependencies": {

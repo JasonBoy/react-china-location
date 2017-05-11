@@ -122,7 +122,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       /******/__webpack_require__.p = "";
       /******/
       /******/ // Load entry module and return exports
-      /******/return __webpack_require__(__webpack_require__.s = 19);
+      /******/return __webpack_require__(__webpack_require__.s = 21);
       /******/
     }(
     /************************************************************************/
@@ -280,7 +280,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       var canDefineProperty = __webpack_require__(6);
       var hasOwnProperty = Object.prototype.hasOwnProperty;
 
-      var REACT_ELEMENT_TYPE = __webpack_require__(13);
+      var REACT_ELEMENT_TYPE = __webpack_require__(14);
 
       var RESERVED_PROPS = {
         key: true,
@@ -1449,1144 +1449,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
        * of patent rights can be found in the PATENTS file in the same directory.
        */
 
-      var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
-
-      module.exports = ReactPropTypesSecret;
-
-      /***/
-    },
-    /* 13 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-      /**
-       * Copyright 2014-present, Facebook, Inc.
-       * All rights reserved.
-       *
-       * This source code is licensed under the BSD-style license found in the
-       * LICENSE file in the root directory of this source tree. An additional grant
-       * of patent rights can be found in the PATENTS file in the same directory.
-       *
-       * 
-       */
-
-      // The Symbol used to tag the ReactElement type. If there is no native Symbol
-      // nor polyfill, then a plain number is used for performance.
-
-      var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol['for'] && Symbol['for']('react.element') || 0xeac7;
-
-      module.exports = REACT_ELEMENT_TYPE;
-
-      /***/
-    },
-    /* 14 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-      /**
-       * Copyright 2014-present, Facebook, Inc.
-       * All rights reserved.
-       *
-       * This source code is licensed under the BSD-style license found in the
-       * LICENSE file in the root directory of this source tree. An additional grant
-       * of patent rights can be found in the PATENTS file in the same directory.
-       *
-       */
-
-      /**
-       * ReactElementValidator provides a wrapper around a element factory
-       * which validates the props passed to the element. This is intended to be
-       * used only in DEV and could be replaced by a static type checker for languages
-       * that support it.
-       */
-
-      var ReactCurrentOwner = __webpack_require__(5);
-      var ReactComponentTreeHook = __webpack_require__(10);
-      var ReactElement = __webpack_require__(2);
-
-      var checkReactTypeSpec = __webpack_require__(34);
-
-      var canDefineProperty = __webpack_require__(6);
-      var getIteratorFn = __webpack_require__(16);
-      var warning = __webpack_require__(0);
-
-      function getDeclarationErrorAddendum() {
-        if (ReactCurrentOwner.current) {
-          var name = ReactCurrentOwner.current.getName();
-          if (name) {
-            return ' Check the render method of `' + name + '`.';
-          }
-        }
-        return '';
-      }
-
-      function getSourceInfoErrorAddendum(elementProps) {
-        if (elementProps !== null && elementProps !== undefined && elementProps.__source !== undefined) {
-          var source = elementProps.__source;
-          var fileName = source.fileName.replace(/^.*[\\\/]/, '');
-          var lineNumber = source.lineNumber;
-          return ' Check your code at ' + fileName + ':' + lineNumber + '.';
-        }
-        return '';
-      }
-
-      /**
-       * Warn if there's no key explicitly set on dynamic arrays of children or
-       * object keys are not valid. This allows us to keep track of children between
-       * updates.
-       */
-      var ownerHasKeyUseWarning = {};
-
-      function getCurrentComponentErrorInfo(parentType) {
-        var info = getDeclarationErrorAddendum();
-
-        if (!info) {
-          var parentName = typeof parentType === 'string' ? parentType : parentType.displayName || parentType.name;
-          if (parentName) {
-            info = ' Check the top-level render call using <' + parentName + '>.';
-          }
-        }
-        return info;
-      }
-
-      /**
-       * Warn if the element doesn't have an explicit key assigned to it.
-       * This element is in an array. The array could grow and shrink or be
-       * reordered. All children that haven't already been validated are required to
-       * have a "key" property assigned to it. Error statuses are cached so a warning
-       * will only be shown once.
-       *
-       * @internal
-       * @param {ReactElement} element Element that requires a key.
-       * @param {*} parentType element's parent's type.
-       */
-      function validateExplicitKey(element, parentType) {
-        if (!element._store || element._store.validated || element.key != null) {
-          return;
-        }
-        element._store.validated = true;
-
-        var memoizer = ownerHasKeyUseWarning.uniqueKey || (ownerHasKeyUseWarning.uniqueKey = {});
-
-        var currentComponentErrorInfo = getCurrentComponentErrorInfo(parentType);
-        if (memoizer[currentComponentErrorInfo]) {
-          return;
-        }
-        memoizer[currentComponentErrorInfo] = true;
-
-        // Usually the current owner is the offender, but if it accepts children as a
-        // property, it may be the creator of the child that's responsible for
-        // assigning it a key.
-        var childOwner = '';
-        if (element && element._owner && element._owner !== ReactCurrentOwner.current) {
-          // Give the component that originally created this child.
-          childOwner = ' It was passed a child from ' + element._owner.getName() + '.';
-        }
-
-        true ? warning(false, 'Each child in an array or iterator should have a unique "key" prop.' + '%s%s See https://fb.me/react-warning-keys for more information.%s', currentComponentErrorInfo, childOwner, ReactComponentTreeHook.getCurrentStackAddendum(element)) : void 0;
-      }
-
-      /**
-       * Ensure that every element either is passed in a static location, in an
-       * array with an explicit keys property defined, or in an object literal
-       * with valid key property.
-       *
-       * @internal
-       * @param {ReactNode} node Statically passed child of any type.
-       * @param {*} parentType node's parent's type.
-       */
-      function validateChildKeys(node, parentType) {
-        if ((typeof node === 'undefined' ? 'undefined' : _typeof(node)) !== 'object') {
-          return;
-        }
-        if (Array.isArray(node)) {
-          for (var i = 0; i < node.length; i++) {
-            var child = node[i];
-            if (ReactElement.isValidElement(child)) {
-              validateExplicitKey(child, parentType);
-            }
-          }
-        } else if (ReactElement.isValidElement(node)) {
-          // This element was passed in a valid location.
-          if (node._store) {
-            node._store.validated = true;
-          }
-        } else if (node) {
-          var iteratorFn = getIteratorFn(node);
-          // Entry iterators provide implicit keys.
-          if (iteratorFn) {
-            if (iteratorFn !== node.entries) {
-              var iterator = iteratorFn.call(node);
-              var step;
-              while (!(step = iterator.next()).done) {
-                if (ReactElement.isValidElement(step.value)) {
-                  validateExplicitKey(step.value, parentType);
-                }
-              }
-            }
-          }
-        }
-      }
-
-      /**
-       * Given an element, validate that its props follow the propTypes definition,
-       * provided by the type.
-       *
-       * @param {ReactElement} element
-       */
-      function validatePropTypes(element) {
-        var componentClass = element.type;
-        if (typeof componentClass !== 'function') {
-          return;
-        }
-        var name = componentClass.displayName || componentClass.name;
-        if (componentClass.propTypes) {
-          checkReactTypeSpec(componentClass.propTypes, element.props, 'prop', name, element, null);
-        }
-        if (typeof componentClass.getDefaultProps === 'function') {
-          true ? warning(componentClass.getDefaultProps.isReactClassApproved, 'getDefaultProps is only used on classic React.createClass ' + 'definitions. Use a static property named `defaultProps` instead.') : void 0;
-        }
-      }
-
-      var ReactElementValidator = {
-
-        createElement: function createElement(type, props, children) {
-          var validType = typeof type === 'string' || typeof type === 'function';
-          // We warn in this case but don't throw. We expect the element creation to
-          // succeed and there will likely be errors in render.
-          if (!validType) {
-            if (typeof type !== 'function' && typeof type !== 'string') {
-              var info = '';
-              if (type === undefined || (typeof type === 'undefined' ? 'undefined' : _typeof(type)) === 'object' && type !== null && Object.keys(type).length === 0) {
-                info += ' You likely forgot to export your component from the file ' + 'it\'s defined in.';
-              }
-
-              var sourceInfo = getSourceInfoErrorAddendum(props);
-              if (sourceInfo) {
-                info += sourceInfo;
-              } else {
-                info += getDeclarationErrorAddendum();
-              }
-
-              info += ReactComponentTreeHook.getCurrentStackAddendum();
-
-              true ? warning(false, 'React.createElement: type is invalid -- expected a string (for ' + 'built-in components) or a class/function (for composite ' + 'components) but got: %s.%s', type == null ? type : typeof type === 'undefined' ? 'undefined' : _typeof(type), info) : void 0;
-            }
-          }
-
-          var element = ReactElement.createElement.apply(this, arguments);
-
-          // The result can be nullish if a mock or a custom function is used.
-          // TODO: Drop this when these are no longer allowed as the type argument.
-          if (element == null) {
-            return element;
-          }
-
-          // Skip key warning if the type isn't valid since our key validation logic
-          // doesn't expect a non-string/function type and can throw confusing errors.
-          // We don't want exception behavior to differ between dev and prod.
-          // (Rendering will throw with a helpful message and as soon as the type is
-          // fixed, the key warnings will appear.)
-          if (validType) {
-            for (var i = 2; i < arguments.length; i++) {
-              validateChildKeys(arguments[i], type);
-            }
-          }
-
-          validatePropTypes(element);
-
-          return element;
-        },
-
-        createFactory: function createFactory(type) {
-          var validatedFactory = ReactElementValidator.createElement.bind(null, type);
-          // Legacy hook TODO: Warn if this is accessed
-          validatedFactory.type = type;
-
-          if (true) {
-            if (canDefineProperty) {
-              Object.defineProperty(validatedFactory, 'type', {
-                enumerable: false,
-                get: function get() {
-                  true ? warning(false, 'Factory.type is deprecated. Access the class directly ' + 'before passing it to createFactory.') : void 0;
-                  Object.defineProperty(this, 'type', {
-                    value: type
-                  });
-                  return type;
-                }
-              });
-            }
-          }
-
-          return validatedFactory;
-        },
-
-        cloneElement: function cloneElement(element, props, children) {
-          var newElement = ReactElement.cloneElement.apply(this, arguments);
-          for (var i = 2; i < arguments.length; i++) {
-            validateChildKeys(arguments[i], newElement.type);
-          }
-          validatePropTypes(newElement);
-          return newElement;
-        }
-
-      };
-
-      module.exports = ReactElementValidator;
-
-      /***/
-    },
-    /* 15 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-      /**
-       * Copyright 2013-present, Facebook, Inc.
-       * All rights reserved.
-       *
-       * This source code is licensed under the BSD-style license found in the
-       * LICENSE file in the root directory of this source tree. An additional grant
-       * of patent rights can be found in the PATENTS file in the same directory.
-       *
-       * 
-       */
-
-      var ReactPropTypeLocationNames = {};
-
-      if (true) {
-        ReactPropTypeLocationNames = {
-          prop: 'prop',
-          context: 'context',
-          childContext: 'child context'
-        };
-      }
-
-      module.exports = ReactPropTypeLocationNames;
-
-      /***/
-    },
-    /* 16 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-      /**
-       * Copyright 2013-present, Facebook, Inc.
-       * All rights reserved.
-       *
-       * This source code is licensed under the BSD-style license found in the
-       * LICENSE file in the root directory of this source tree. An additional grant
-       * of patent rights can be found in the PATENTS file in the same directory.
-       *
-       * 
-       */
-
-      /* global Symbol */
-
-      var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
-      var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
-
-      /**
-       * Returns the iterator method function contained on the iterable object.
-       *
-       * Be sure to invoke the function with the iterable as context:
-       *
-       *     var iteratorFn = getIteratorFn(myIterable);
-       *     if (iteratorFn) {
-       *       var iterator = iteratorFn.call(myIterable);
-       *       ...
-       *     }
-       *
-       * @param {?object} maybeIterable
-       * @return {?function}
-       */
-      function getIteratorFn(maybeIterable) {
-        var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
-        if (typeof iteratorFn === 'function') {
-          return iteratorFn;
-        }
-      }
-
-      module.exports = getIteratorFn;
-
-      /***/
-    },
-    /* 17 */
-    /***/function (module, exports, __webpack_require__) {
-
-      (function webpackUniversalModuleDefinition(root, factory) {
-        if (true) module.exports = factory();else if (typeof define === 'function' && define.amd) define([], factory);else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') exports["ChinaLocation"] = factory();else root["ChinaLocation"] = factory();
-      })(this, function () {
-        return (/******/function (modules) {
-            // webpackBootstrap
-            /******/ // The module cache
-            /******/var installedModules = {};
-            /******/
-            /******/ // The require function
-            /******/function __webpack_require__(moduleId) {
-              /******/
-              /******/ // Check if module is in cache
-              /******/if (installedModules[moduleId]) {
-                /******/return installedModules[moduleId].exports;
-                /******/
-              }
-              /******/ // Create a new module (and put it into the cache)
-              /******/var module = installedModules[moduleId] = {
-                /******/i: moduleId,
-                /******/l: false,
-                /******/exports: {}
-                /******/ };
-              /******/
-              /******/ // Execute the module function
-              /******/modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-              /******/
-              /******/ // Flag the module as loaded
-              /******/module.l = true;
-              /******/
-              /******/ // Return the exports of the module
-              /******/return module.exports;
-              /******/
-            }
-            /******/
-            /******/
-            /******/ // expose the modules object (__webpack_modules__)
-            /******/__webpack_require__.m = modules;
-            /******/
-            /******/ // expose the module cache
-            /******/__webpack_require__.c = installedModules;
-            /******/
-            /******/ // identity function for calling harmony imports with the correct context
-            /******/__webpack_require__.i = function (value) {
-              return value;
-            };
-            /******/
-            /******/ // define getter function for harmony exports
-            /******/__webpack_require__.d = function (exports, name, getter) {
-              /******/if (!__webpack_require__.o(exports, name)) {
-                /******/Object.defineProperty(exports, name, {
-                  /******/configurable: false,
-                  /******/enumerable: true,
-                  /******/get: getter
-                  /******/ });
-                /******/
-              }
-              /******/
-            };
-            /******/
-            /******/ // getDefaultExport function for compatibility with non-harmony modules
-            /******/__webpack_require__.n = function (module) {
-              /******/var getter = module && module.__esModule ?
-              /******/function getDefault() {
-                return module['default'];
-              } :
-              /******/function getModuleExports() {
-                return module;
-              };
-              /******/__webpack_require__.d(getter, 'a', getter);
-              /******/return getter;
-              /******/
-            };
-            /******/
-            /******/ // Object.prototype.hasOwnProperty.call
-            /******/__webpack_require__.o = function (object, property) {
-              return Object.prototype.hasOwnProperty.call(object, property);
-            };
-            /******/
-            /******/ // __webpack_public_path__
-            /******/__webpack_require__.p = "";
-            /******/
-            /******/ // Load entry module and return exports
-            /******/return __webpack_require__(__webpack_require__.s = 0);
-            /******/
-          }(
-          /************************************************************************/
-          /******/[
-          /* 0 */
-          /***/function (module, exports, __webpack_require__) {
-
-            "use strict";
-
-            var _createClass = function () {
-              function defineProperties(target, props) {
-                for (var i = 0; i < props.length; i++) {
-                  var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-                }
-              }return function (Constructor, protoProps, staticProps) {
-                if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-              };
-            }();
-
-            function _classCallCheck(instance, Constructor) {
-              if (!(instance instanceof Constructor)) {
-                throw new TypeError("Cannot call a class as a function");
-              }
-            }
-
-            var ChinaLocation = function () {
-              function ChinaLocation(locationData) {
-                _classCallCheck(this, ChinaLocation);
-
-                if (!(this instanceof ChinaLocation)) {
-                  return new ChinaLocation(locationData);
-                }
-
-                this.locationData = locationData;
-
-                this.currentProvinces = this.getProvinces();
-                var defaultProvince = this.currentProvinces[0];
-                this.currentCities = this.getCities(defaultProvince);
-                var defaultCity = this.currentCities[0];
-                this.currentDistricts = this.getDistricts(defaultCity, defaultProvince);
-
-                this.activeProvince = defaultProvince.code; //province code
-                this.activeCity = defaultCity.code; //city code
-                this.activeDistrict = this.currentDistricts[0].code; //district code
-              }
-
-              _createClass(ChinaLocation, [{
-                key: 'getProvinces',
-                value: function getProvinces() {
-                  var _this = this;
-
-                  var provinceKeys = Object.keys(this.locationData);
-                  var provinces = [];
-                  provinceKeys.forEach(function (provinceKey) {
-                    var provinceData = _this.locationData[provinceKey];
-                    provinces.push({
-                      code: provinceData.code,
-                      name: provinceData.name
-                    });
-                  });
-                  return provinces;
-                }
-              }, {
-                key: 'getCities',
-                value: function getCities(currentProvince) {
-                  var citiesObject = this.locationData[currentProvince.code].cities;
-                  var cityKeys = Object.keys(citiesObject);
-                  var cities = [];
-                  cityKeys.forEach(function (cityKey) {
-                    var cityData = citiesObject[cityKey];
-                    cities.push({
-                      code: cityData.code,
-                      name: cityData.name
-                    });
-                  });
-                  return cities;
-                }
-              }, {
-                key: 'getDistricts',
-                value: function getDistricts(currentCity, currentProvince) {
-                  var provincesObject = this.locationData[currentProvince.code];
-                  var currentCityObject = provincesObject.cities[currentCity.code];
-                  var districtsObject = currentCityObject.districts;
-                  var districtKeys = Object.keys(districtsObject);
-                  var districts = [];
-                  districtKeys.forEach(function (districtKey) {
-                    districts.push({
-                      code: districtKey,
-                      name: districtsObject[districtKey]
-                    });
-                  });
-                  return districts;
-                }
-              }, {
-                key: 'getProvinceByCode',
-                value: function getProvinceByCode(code) {
-                  return this.locationData[code];
-                }
-              }, {
-                key: 'getCityByCode',
-                value: function getCityByCode(cityCode, provinceCode) {
-                  return this.getProvinceByCode(provinceCode).cities[cityCode];
-                }
-              }, {
-                key: 'getDistrictByCode',
-                value: function getDistrictByCode(districtCode, cityCode, provinceCode) {
-                  return this.getCityByCode(cityCode, provinceCode).districts[districtCode];
-                }
-              }, {
-                key: 'getCity',
-                value: function getCity(code, cities) {
-                  return cities[code];
-                }
-              }, {
-                key: 'getDistrict',
-                value: function getDistrict(code, districts) {
-                  return districts[code];
-                }
-              }, {
-                key: 'changeLocation',
-                value: function changeLocation(provinceCode, cityCode, districtCode) {
-                  this.changeProvince.apply(this, arguments);
-                }
-              }, {
-                key: 'changeProvince',
-                value: function changeProvince(provinceCode, cityCode, districtCode) {
-                  var currentProvince = { code: provinceCode };
-                  var cities = this.getCities(currentProvince);
-                  var city = cities[0];
-                  if (cityCode) {
-                    var i = 0;
-                    for (; i < cities.length; i++) {
-                      var tempCity = cities[i];
-                      if (tempCity.code == cityCode) {
-                        city = tempCity;
-                        break;
-                      }
-                    }
-                  }
-                  // const districts = this.getDistricts(defaultCity, pObject);
-
-                  this.currentCities = cities;
-                  this.activeProvince = provinceCode;
-
-                  this.changeCity(city.code, districtCode);
-                  // this.currentDistricts = districts;
-                  // this.activeCity = defaultCity.code;
-                  // this.activeDistrict = districts[0].code;
-                }
-              }, {
-                key: 'changeCity',
-                value: function changeCity(cityCode, districtCode) {
-                  var districts = this.getDistricts({
-                    code: cityCode
-                  }, {
-                    code: this.activeProvince
-                  });
-
-                  this.currentDistricts = districts;
-                  this.activeCity = cityCode;
-
-                  var district = districts[0];
-                  if (districtCode) {
-                    var i = 0;
-                    for (; i < districts.length; i++) {
-                      var tempDistrict = districts[i];
-                      if (tempDistrict.code == districtCode) {
-                        district = tempDistrict;
-                        break;
-                      }
-                    }
-                  }
-
-                  this.changeDistrict(district.code);
-                  // this.activeDistrict = districts[0].code;
-                }
-              }, {
-                key: 'changeDistrict',
-                value: function changeDistrict(districtCode) {
-                  this.activeDistrict = districtCode;
-                }
-              }, {
-                key: 'getCurrentAddress',
-                value: function getCurrentAddress() {
-                  var originalProvince = this.getProvinceByCode(this.activeProvince);
-                  var originalCity = this.getCity(this.activeCity, originalProvince.cities);
-                  var originalDistrict = this.getDistrict(this.activeDistrict, originalCity.districts);
-
-                  return {
-                    province: {
-                      code: originalProvince.code,
-                      name: originalProvince.name
-                    },
-                    city: {
-                      code: originalCity.code,
-                      name: originalCity.name
-                    },
-                    district: {
-                      code: this.activeDistrict,
-                      name: originalDistrict
-                    }
-                  };
-                }
-              }, {
-                key: 'getCurrentProvinces',
-                value: function getCurrentProvinces() {
-                  return this.currentProvinces;
-                }
-              }, {
-                key: 'getCurrentCities',
-                value: function getCurrentCities() {
-                  return this.currentCities;
-                }
-              }, {
-                key: 'getCurrentDistricts',
-                value: function getCurrentDistricts() {
-                  return this.currentDistricts;
-                }
-              }]);
-
-              return ChinaLocation;
-            }();
-
-            module.exports = ChinaLocation;
-
-            /***/
-          }])
-        );
-      });
-      //# sourceMappingURL=china-location.js.map
-
-      /***/
-    },
-    /* 18 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-
-      module.exports = __webpack_require__(26);
-
-      /***/
-    },
-    /* 19 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-
-      Object.defineProperty(exports, "__esModule", {
-        value: true
-      });
-
-      var _createClass = function () {
-        function defineProperties(target, props) {
-          for (var i = 0; i < props.length; i++) {
-            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-          }
-        }return function (Constructor, protoProps, staticProps) {
-          if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-        };
-      }();
-
-      var _react = __webpack_require__(18);
-
-      var _react2 = _interopRequireDefault(_react);
-
-      var _chinaLocation = __webpack_require__(17);
-
-      var _chinaLocation2 = _interopRequireDefault(_chinaLocation);
-
-      function _interopRequireDefault(obj) {
-        return obj && obj.__esModule ? obj : { default: obj };
-      }
-
-      function _classCallCheck(instance, Constructor) {
-        if (!(instance instanceof Constructor)) {
-          throw new TypeError("Cannot call a class as a function");
-        }
-      }
-
-      function _possibleConstructorReturn(self, call) {
-        if (!self) {
-          throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-        }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-      }
-
-      function _inherits(subClass, superClass) {
-        if (typeof superClass !== "function" && superClass !== null) {
-          throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
-        }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-      }
-
-      var ChinaLocation = function (_React$Component) {
-        _inherits(ChinaLocation, _React$Component);
-
-        function ChinaLocation(props) {
-          _classCallCheck(this, ChinaLocation);
-
-          var _this = _possibleConstructorReturn(this, (ChinaLocation.__proto__ || Object.getPrototypeOf(ChinaLocation)).call(this, props));
-
-          if (!props.list) {
-            throw new Error('[ReactChinaLocation] location data "props.list" is required!');
-          }
-
-          _this.location = new _chinaLocation2.default(props.list);
-
-          _this.handleProvinceChange = _this.handleProvinceChange.bind(_this);
-          _this.handleCityChange = _this.handleCityChange.bind(_this);
-          _this.handleDistrictChange = _this.handleDistrictChange.bind(_this);
-          _this.updateLocationState = _this.updateLocationState.bind(_this);
-
-          _this.state = {
-            activeProvince: _this.location.activeProvince,
-            activeCity: _this.location.activeCity,
-            activeDistrict: _this.location.activeDistrict,
-            currentProvinces: _this.location.getCurrentProvinces(),
-            currentCities: _this.location.getCurrentCities(),
-            currentDistricts: _this.location.getCurrentDistricts()
-          };
-
-          return _this;
-        }
-
-        _createClass(ChinaLocation, [{
-          key: 'componentDidMount',
-          value: function componentDidMount() {
-            this.props.onLocationChange(this.location.getCurrentAddress());
-          }
-        }, {
-          key: 'handleProvinceChange',
-          value: function handleProvinceChange(e) {
-            var provinceCode = e.target.value;
-            this.location.changeProvince(provinceCode);
-            this.updateLocationState();
-            this.props.onLocationChange(this.location.getCurrentAddress());
-          }
-        }, {
-          key: 'handleCityChange',
-          value: function handleCityChange(e) {
-            this.location.changeCity(e.target.value);
-            this.setState({
-              activeCity: this.location.activeCity,
-              activeDistrict: this.location.activeDistrict,
-              currentDistricts: this.location.getCurrentDistricts()
-            });
-            this.props.onLocationChange(this.location.getCurrentAddress());
-          }
-        }, {
-          key: 'handleDistrictChange',
-          value: function handleDistrictChange(e) {
-            this.location.changeDistrict(e.target.value);
-            this.setState({
-              activeDistrict: this.location.activeDistrict
-            });
-            this.props.onLocationChange(this.location.getCurrentAddress());
-          }
-        }, {
-          key: 'updateLocationState',
-          value: function updateLocationState() {
-            this.setState({
-              activeProvince: this.location.activeProvince,
-              activeCity: this.location.activeCity,
-              activeDistrict: this.location.activeDistrict,
-              currentProvinces: this.location.getCurrentProvinces(),
-              currentCities: this.location.getCurrentCities(),
-              currentDistricts: this.location.getCurrentDistricts()
-            });
-          }
-        }, {
-          key: 'render',
-          value: function render() {
-
-            return _react2.default.createElement('div', { className: 'china-location-wrapper' }, _react2.default.createElement('select', { value: this.state.activeProvince, onChange: this.handleProvinceChange }, this.state.currentProvinces.map(function (ele) {
-              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
-            })), _react2.default.createElement('select', { value: this.state.activeCity, onChange: this.handleCityChange }, this.state.currentCities.map(function (ele) {
-              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
-            })), _react2.default.createElement('select', { value: this.state.activeDistrict, onChange: this.handleDistrictChange }, this.state.currentDistricts.map(function (ele) {
-              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
-            })));
-          }
-        }]);
-
-        return ChinaLocation;
-      }(_react2.default.Component);
-
-      exports.default = ChinaLocation;
-
-      /***/
-    },
-    /* 20 */
-    /***/function (module, exports) {
-
-      // shim for using process in browser
-      var process = module.exports = {};
-
-      // cached from whatever global is present so that test runners that stub it
-      // don't break things.  But we need to wrap it in a try catch in case it is
-      // wrapped in strict mode code which doesn't define any globals.  It's inside a
-      // function because try/catches deoptimize in certain engines.
-
-      var cachedSetTimeout;
-      var cachedClearTimeout;
-
-      function defaultSetTimout() {
-        throw new Error('setTimeout has not been defined');
-      }
-      function defaultClearTimeout() {
-        throw new Error('clearTimeout has not been defined');
-      }
-      (function () {
-        try {
-          if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-          } else {
-            cachedSetTimeout = defaultSetTimout;
-          }
-        } catch (e) {
-          cachedSetTimeout = defaultSetTimout;
-        }
-        try {
-          if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-          } else {
-            cachedClearTimeout = defaultClearTimeout;
-          }
-        } catch (e) {
-          cachedClearTimeout = defaultClearTimeout;
-        }
-      })();
-      function runTimeout(fun) {
-        if (cachedSetTimeout === setTimeout) {
-          //normal enviroments in sane situations
-          return setTimeout(fun, 0);
-        }
-        // if setTimeout wasn't available but was latter defined
-        if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-          cachedSetTimeout = setTimeout;
-          return setTimeout(fun, 0);
-        }
-        try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
-          return cachedSetTimeout(fun, 0);
-        } catch (e) {
-          try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-          } catch (e) {
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-          }
-        }
-      }
-      function runClearTimeout(marker) {
-        if (cachedClearTimeout === clearTimeout) {
-          //normal enviroments in sane situations
-          return clearTimeout(marker);
-        }
-        // if clearTimeout wasn't available but was latter defined
-        if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-          cachedClearTimeout = clearTimeout;
-          return clearTimeout(marker);
-        }
-        try {
-          // when when somebody has screwed with setTimeout but no I.E. maddness
-          return cachedClearTimeout(marker);
-        } catch (e) {
-          try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-          } catch (e) {
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-          }
-        }
-      }
-      var queue = [];
-      var draining = false;
-      var currentQueue;
-      var queueIndex = -1;
-
-      function cleanUpNextTick() {
-        if (!draining || !currentQueue) {
-          return;
-        }
-        draining = false;
-        if (currentQueue.length) {
-          queue = currentQueue.concat(queue);
-        } else {
-          queueIndex = -1;
-        }
-        if (queue.length) {
-          drainQueue();
-        }
-      }
-
-      function drainQueue() {
-        if (draining) {
-          return;
-        }
-        var timeout = runTimeout(cleanUpNextTick);
-        draining = true;
-
-        var len = queue.length;
-        while (len) {
-          currentQueue = queue;
-          queue = [];
-          while (++queueIndex < len) {
-            if (currentQueue) {
-              currentQueue[queueIndex].run();
-            }
-          }
-          queueIndex = -1;
-          len = queue.length;
-        }
-        currentQueue = null;
-        draining = false;
-        runClearTimeout(timeout);
-      }
-
-      process.nextTick = function (fun) {
-        var args = new Array(arguments.length - 1);
-        if (arguments.length > 1) {
-          for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-          }
-        }
-        queue.push(new Item(fun, args));
-        if (queue.length === 1 && !draining) {
-          runTimeout(drainQueue);
-        }
-      };
-
-      // v8 likes predictible objects
-      function Item(fun, array) {
-        this.fun = fun;
-        this.array = array;
-      }
-      Item.prototype.run = function () {
-        this.fun.apply(null, this.array);
-      };
-      process.title = 'browser';
-      process.browser = true;
-      process.env = {};
-      process.argv = [];
-      process.version = ''; // empty string to avoid regexp issues
-      process.versions = {};
-
-      function noop() {}
-
-      process.on = noop;
-      process.addListener = noop;
-      process.once = noop;
-      process.off = noop;
-      process.removeListener = noop;
-      process.removeAllListeners = noop;
-      process.emit = noop;
-      process.prependListener = noop;
-      process.prependOnceListener = noop;
-
-      process.listeners = function (name) {
-        return [];
-      };
-
-      process.binding = function (name) {
-        throw new Error('process.binding is not supported');
-      };
-
-      process.cwd = function () {
-        return '/';
-      };
-      process.chdir = function (dir) {
-        throw new Error('process.chdir is not supported');
-      };
-      process.umask = function () {
-        return 0;
-      };
-
-      /***/
-    },
-    /* 21 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-      /**
-       * Copyright 2013-present, Facebook, Inc.
-       * All rights reserved.
-       *
-       * This source code is licensed under the BSD-style license found in the
-       * LICENSE file in the root directory of this source tree. An additional grant
-       * of patent rights can be found in the PATENTS file in the same directory.
-       */
-
-      if (true) {
-        var invariant = __webpack_require__(1);
-        var warning = __webpack_require__(0);
-        var ReactPropTypesSecret = __webpack_require__(12);
-        var loggedTypeFailures = {};
-      }
-
-      /**
-       * Assert that the values match with the type specs.
-       * Error messages are memorized and will only be shown once.
-       *
-       * @param {object} typeSpecs Map of name to a ReactPropType
-       * @param {object} values Runtime values that need to be type-checked
-       * @param {string} location e.g. "prop", "context", "child context"
-       * @param {string} componentName Name of the component for error messages.
-       * @param {?Function} getStack Returns the component stack.
-       * @private
-       */
-      function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
-        if (true) {
-          for (var typeSpecName in typeSpecs) {
-            if (typeSpecs.hasOwnProperty(typeSpecName)) {
-              var error;
-              // Prop type validation may throw. In case they do, we don't want to
-              // fail the render phase where it didn't fail before. So we log it.
-              // After these have been cleaned up, we'll let them throw.
-              try {
-                // This is intentionally an invariant that gets caught. It's the same
-                // behavior as without this statement except with a better message.
-                invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', componentName || 'React class', location, typeSpecName);
-                error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
-              } catch (ex) {
-                error = ex;
-              }
-              warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error === 'undefined' ? 'undefined' : _typeof(error));
-              if (error instanceof Error && !(error.message in loggedTypeFailures)) {
-                // Only monitor this failure once because there tends to be a lot of the
-                // same error.
-                loggedTypeFailures[error.message] = true;
-
-                var stack = getStack ? getStack() : '';
-
-                warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
-              }
-            }
-          }
-        }
-      }
-
-      module.exports = checkPropTypes;
-
-      /***/
-    },
-    /* 22 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-      /**
-       * Copyright 2013-present, Facebook, Inc.
-       * All rights reserved.
-       *
-       * This source code is licensed under the BSD-style license found in the
-       * LICENSE file in the root directory of this source tree. An additional grant
-       * of patent rights can be found in the PATENTS file in the same directory.
-       */
-
-      // React 15.5 references this module, and assumes PropTypes are still callable in production.
-      // Therefore we re-export development-only version with all the PropTypes checks here.
-      // However if one is migrating to the `prop-types` npm library, they will go through the
-      // `index.js` entry point, and it will branch depending on the environment.
-
-      var factory = __webpack_require__(23);
-      module.exports = function (isValidElement) {
-        // It is still allowed in 15.5.
-        var throwOnDirectAccess = false;
-        return factory(isValidElement, throwOnDirectAccess);
-      };
-
-      /***/
-    },
-    /* 23 */
-    /***/function (module, exports, __webpack_require__) {
-
-      "use strict";
-      /**
-       * Copyright 2013-present, Facebook, Inc.
-       * All rights reserved.
-       *
-       * This source code is licensed under the BSD-style license found in the
-       * LICENSE file in the root directory of this source tree. An additional grant
-       * of patent rights can be found in the PATENTS file in the same directory.
-       */
-
       var emptyFunction = __webpack_require__(7);
       var invariant = __webpack_require__(1);
       var warning = __webpack_require__(0);
 
-      var ReactPropTypesSecret = __webpack_require__(12);
-      var checkPropTypes = __webpack_require__(21);
+      var ReactPropTypesSecret = __webpack_require__(13);
+      var checkPropTypes = __webpack_require__(23);
 
       module.exports = function (isValidElement, throwOnDirectAccess) {
         /* global Symbol */
@@ -3063,7 +1931,1180 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
+    /* 13 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+      /**
+       * Copyright 2013-present, Facebook, Inc.
+       * All rights reserved.
+       *
+       * This source code is licensed under the BSD-style license found in the
+       * LICENSE file in the root directory of this source tree. An additional grant
+       * of patent rights can be found in the PATENTS file in the same directory.
+       */
+
+      var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+
+      module.exports = ReactPropTypesSecret;
+
+      /***/
+    },
+    /* 14 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+      /**
+       * Copyright 2014-present, Facebook, Inc.
+       * All rights reserved.
+       *
+       * This source code is licensed under the BSD-style license found in the
+       * LICENSE file in the root directory of this source tree. An additional grant
+       * of patent rights can be found in the PATENTS file in the same directory.
+       *
+       * 
+       */
+
+      // The Symbol used to tag the ReactElement type. If there is no native Symbol
+      // nor polyfill, then a plain number is used for performance.
+
+      var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol['for'] && Symbol['for']('react.element') || 0xeac7;
+
+      module.exports = REACT_ELEMENT_TYPE;
+
+      /***/
+    },
+    /* 15 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+      /**
+       * Copyright 2014-present, Facebook, Inc.
+       * All rights reserved.
+       *
+       * This source code is licensed under the BSD-style license found in the
+       * LICENSE file in the root directory of this source tree. An additional grant
+       * of patent rights can be found in the PATENTS file in the same directory.
+       *
+       */
+
+      /**
+       * ReactElementValidator provides a wrapper around a element factory
+       * which validates the props passed to the element. This is intended to be
+       * used only in DEV and could be replaced by a static type checker for languages
+       * that support it.
+       */
+
+      var ReactCurrentOwner = __webpack_require__(5);
+      var ReactComponentTreeHook = __webpack_require__(10);
+      var ReactElement = __webpack_require__(2);
+
+      var checkReactTypeSpec = __webpack_require__(35);
+
+      var canDefineProperty = __webpack_require__(6);
+      var getIteratorFn = __webpack_require__(17);
+      var warning = __webpack_require__(0);
+
+      function getDeclarationErrorAddendum() {
+        if (ReactCurrentOwner.current) {
+          var name = ReactCurrentOwner.current.getName();
+          if (name) {
+            return ' Check the render method of `' + name + '`.';
+          }
+        }
+        return '';
+      }
+
+      function getSourceInfoErrorAddendum(elementProps) {
+        if (elementProps !== null && elementProps !== undefined && elementProps.__source !== undefined) {
+          var source = elementProps.__source;
+          var fileName = source.fileName.replace(/^.*[\\\/]/, '');
+          var lineNumber = source.lineNumber;
+          return ' Check your code at ' + fileName + ':' + lineNumber + '.';
+        }
+        return '';
+      }
+
+      /**
+       * Warn if there's no key explicitly set on dynamic arrays of children or
+       * object keys are not valid. This allows us to keep track of children between
+       * updates.
+       */
+      var ownerHasKeyUseWarning = {};
+
+      function getCurrentComponentErrorInfo(parentType) {
+        var info = getDeclarationErrorAddendum();
+
+        if (!info) {
+          var parentName = typeof parentType === 'string' ? parentType : parentType.displayName || parentType.name;
+          if (parentName) {
+            info = ' Check the top-level render call using <' + parentName + '>.';
+          }
+        }
+        return info;
+      }
+
+      /**
+       * Warn if the element doesn't have an explicit key assigned to it.
+       * This element is in an array. The array could grow and shrink or be
+       * reordered. All children that haven't already been validated are required to
+       * have a "key" property assigned to it. Error statuses are cached so a warning
+       * will only be shown once.
+       *
+       * @internal
+       * @param {ReactElement} element Element that requires a key.
+       * @param {*} parentType element's parent's type.
+       */
+      function validateExplicitKey(element, parentType) {
+        if (!element._store || element._store.validated || element.key != null) {
+          return;
+        }
+        element._store.validated = true;
+
+        var memoizer = ownerHasKeyUseWarning.uniqueKey || (ownerHasKeyUseWarning.uniqueKey = {});
+
+        var currentComponentErrorInfo = getCurrentComponentErrorInfo(parentType);
+        if (memoizer[currentComponentErrorInfo]) {
+          return;
+        }
+        memoizer[currentComponentErrorInfo] = true;
+
+        // Usually the current owner is the offender, but if it accepts children as a
+        // property, it may be the creator of the child that's responsible for
+        // assigning it a key.
+        var childOwner = '';
+        if (element && element._owner && element._owner !== ReactCurrentOwner.current) {
+          // Give the component that originally created this child.
+          childOwner = ' It was passed a child from ' + element._owner.getName() + '.';
+        }
+
+        true ? warning(false, 'Each child in an array or iterator should have a unique "key" prop.' + '%s%s See https://fb.me/react-warning-keys for more information.%s', currentComponentErrorInfo, childOwner, ReactComponentTreeHook.getCurrentStackAddendum(element)) : void 0;
+      }
+
+      /**
+       * Ensure that every element either is passed in a static location, in an
+       * array with an explicit keys property defined, or in an object literal
+       * with valid key property.
+       *
+       * @internal
+       * @param {ReactNode} node Statically passed child of any type.
+       * @param {*} parentType node's parent's type.
+       */
+      function validateChildKeys(node, parentType) {
+        if ((typeof node === 'undefined' ? 'undefined' : _typeof(node)) !== 'object') {
+          return;
+        }
+        if (Array.isArray(node)) {
+          for (var i = 0; i < node.length; i++) {
+            var child = node[i];
+            if (ReactElement.isValidElement(child)) {
+              validateExplicitKey(child, parentType);
+            }
+          }
+        } else if (ReactElement.isValidElement(node)) {
+          // This element was passed in a valid location.
+          if (node._store) {
+            node._store.validated = true;
+          }
+        } else if (node) {
+          var iteratorFn = getIteratorFn(node);
+          // Entry iterators provide implicit keys.
+          if (iteratorFn) {
+            if (iteratorFn !== node.entries) {
+              var iterator = iteratorFn.call(node);
+              var step;
+              while (!(step = iterator.next()).done) {
+                if (ReactElement.isValidElement(step.value)) {
+                  validateExplicitKey(step.value, parentType);
+                }
+              }
+            }
+          }
+        }
+      }
+
+      /**
+       * Given an element, validate that its props follow the propTypes definition,
+       * provided by the type.
+       *
+       * @param {ReactElement} element
+       */
+      function validatePropTypes(element) {
+        var componentClass = element.type;
+        if (typeof componentClass !== 'function') {
+          return;
+        }
+        var name = componentClass.displayName || componentClass.name;
+        if (componentClass.propTypes) {
+          checkReactTypeSpec(componentClass.propTypes, element.props, 'prop', name, element, null);
+        }
+        if (typeof componentClass.getDefaultProps === 'function') {
+          true ? warning(componentClass.getDefaultProps.isReactClassApproved, 'getDefaultProps is only used on classic React.createClass ' + 'definitions. Use a static property named `defaultProps` instead.') : void 0;
+        }
+      }
+
+      var ReactElementValidator = {
+
+        createElement: function createElement(type, props, children) {
+          var validType = typeof type === 'string' || typeof type === 'function';
+          // We warn in this case but don't throw. We expect the element creation to
+          // succeed and there will likely be errors in render.
+          if (!validType) {
+            if (typeof type !== 'function' && typeof type !== 'string') {
+              var info = '';
+              if (type === undefined || (typeof type === 'undefined' ? 'undefined' : _typeof(type)) === 'object' && type !== null && Object.keys(type).length === 0) {
+                info += ' You likely forgot to export your component from the file ' + 'it\'s defined in.';
+              }
+
+              var sourceInfo = getSourceInfoErrorAddendum(props);
+              if (sourceInfo) {
+                info += sourceInfo;
+              } else {
+                info += getDeclarationErrorAddendum();
+              }
+
+              info += ReactComponentTreeHook.getCurrentStackAddendum();
+
+              true ? warning(false, 'React.createElement: type is invalid -- expected a string (for ' + 'built-in components) or a class/function (for composite ' + 'components) but got: %s.%s', type == null ? type : typeof type === 'undefined' ? 'undefined' : _typeof(type), info) : void 0;
+            }
+          }
+
+          var element = ReactElement.createElement.apply(this, arguments);
+
+          // The result can be nullish if a mock or a custom function is used.
+          // TODO: Drop this when these are no longer allowed as the type argument.
+          if (element == null) {
+            return element;
+          }
+
+          // Skip key warning if the type isn't valid since our key validation logic
+          // doesn't expect a non-string/function type and can throw confusing errors.
+          // We don't want exception behavior to differ between dev and prod.
+          // (Rendering will throw with a helpful message and as soon as the type is
+          // fixed, the key warnings will appear.)
+          if (validType) {
+            for (var i = 2; i < arguments.length; i++) {
+              validateChildKeys(arguments[i], type);
+            }
+          }
+
+          validatePropTypes(element);
+
+          return element;
+        },
+
+        createFactory: function createFactory(type) {
+          var validatedFactory = ReactElementValidator.createElement.bind(null, type);
+          // Legacy hook TODO: Warn if this is accessed
+          validatedFactory.type = type;
+
+          if (true) {
+            if (canDefineProperty) {
+              Object.defineProperty(validatedFactory, 'type', {
+                enumerable: false,
+                get: function get() {
+                  true ? warning(false, 'Factory.type is deprecated. Access the class directly ' + 'before passing it to createFactory.') : void 0;
+                  Object.defineProperty(this, 'type', {
+                    value: type
+                  });
+                  return type;
+                }
+              });
+            }
+          }
+
+          return validatedFactory;
+        },
+
+        cloneElement: function cloneElement(element, props, children) {
+          var newElement = ReactElement.cloneElement.apply(this, arguments);
+          for (var i = 2; i < arguments.length; i++) {
+            validateChildKeys(arguments[i], newElement.type);
+          }
+          validatePropTypes(newElement);
+          return newElement;
+        }
+
+      };
+
+      module.exports = ReactElementValidator;
+
+      /***/
+    },
+    /* 16 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+      /**
+       * Copyright 2013-present, Facebook, Inc.
+       * All rights reserved.
+       *
+       * This source code is licensed under the BSD-style license found in the
+       * LICENSE file in the root directory of this source tree. An additional grant
+       * of patent rights can be found in the PATENTS file in the same directory.
+       *
+       * 
+       */
+
+      var ReactPropTypeLocationNames = {};
+
+      if (true) {
+        ReactPropTypeLocationNames = {
+          prop: 'prop',
+          context: 'context',
+          childContext: 'child context'
+        };
+      }
+
+      module.exports = ReactPropTypeLocationNames;
+
+      /***/
+    },
+    /* 17 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+      /**
+       * Copyright 2013-present, Facebook, Inc.
+       * All rights reserved.
+       *
+       * This source code is licensed under the BSD-style license found in the
+       * LICENSE file in the root directory of this source tree. An additional grant
+       * of patent rights can be found in the PATENTS file in the same directory.
+       *
+       * 
+       */
+
+      /* global Symbol */
+
+      var ITERATOR_SYMBOL = typeof Symbol === 'function' && Symbol.iterator;
+      var FAUX_ITERATOR_SYMBOL = '@@iterator'; // Before Symbol spec.
+
+      /**
+       * Returns the iterator method function contained on the iterable object.
+       *
+       * Be sure to invoke the function with the iterable as context:
+       *
+       *     var iteratorFn = getIteratorFn(myIterable);
+       *     if (iteratorFn) {
+       *       var iterator = iteratorFn.call(myIterable);
+       *       ...
+       *     }
+       *
+       * @param {?object} maybeIterable
+       * @return {?function}
+       */
+      function getIteratorFn(maybeIterable) {
+        var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+        if (typeof iteratorFn === 'function') {
+          return iteratorFn;
+        }
+      }
+
+      module.exports = getIteratorFn;
+
+      /***/
+    },
+    /* 18 */
+    /***/function (module, exports, __webpack_require__) {
+
+      (function webpackUniversalModuleDefinition(root, factory) {
+        if (true) module.exports = factory();else if (typeof define === 'function' && define.amd) define([], factory);else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') exports["ChinaLocation"] = factory();else root["ChinaLocation"] = factory();
+      })(this, function () {
+        return (/******/function (modules) {
+            // webpackBootstrap
+            /******/ // The module cache
+            /******/var installedModules = {};
+            /******/
+            /******/ // The require function
+            /******/function __webpack_require__(moduleId) {
+              /******/
+              /******/ // Check if module is in cache
+              /******/if (installedModules[moduleId]) {
+                /******/return installedModules[moduleId].exports;
+                /******/
+              }
+              /******/ // Create a new module (and put it into the cache)
+              /******/var module = installedModules[moduleId] = {
+                /******/i: moduleId,
+                /******/l: false,
+                /******/exports: {}
+                /******/ };
+              /******/
+              /******/ // Execute the module function
+              /******/modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+              /******/
+              /******/ // Flag the module as loaded
+              /******/module.l = true;
+              /******/
+              /******/ // Return the exports of the module
+              /******/return module.exports;
+              /******/
+            }
+            /******/
+            /******/
+            /******/ // expose the modules object (__webpack_modules__)
+            /******/__webpack_require__.m = modules;
+            /******/
+            /******/ // expose the module cache
+            /******/__webpack_require__.c = installedModules;
+            /******/
+            /******/ // identity function for calling harmony imports with the correct context
+            /******/__webpack_require__.i = function (value) {
+              return value;
+            };
+            /******/
+            /******/ // define getter function for harmony exports
+            /******/__webpack_require__.d = function (exports, name, getter) {
+              /******/if (!__webpack_require__.o(exports, name)) {
+                /******/Object.defineProperty(exports, name, {
+                  /******/configurable: false,
+                  /******/enumerable: true,
+                  /******/get: getter
+                  /******/ });
+                /******/
+              }
+              /******/
+            };
+            /******/
+            /******/ // getDefaultExport function for compatibility with non-harmony modules
+            /******/__webpack_require__.n = function (module) {
+              /******/var getter = module && module.__esModule ?
+              /******/function getDefault() {
+                return module['default'];
+              } :
+              /******/function getModuleExports() {
+                return module;
+              };
+              /******/__webpack_require__.d(getter, 'a', getter);
+              /******/return getter;
+              /******/
+            };
+            /******/
+            /******/ // Object.prototype.hasOwnProperty.call
+            /******/__webpack_require__.o = function (object, property) {
+              return Object.prototype.hasOwnProperty.call(object, property);
+            };
+            /******/
+            /******/ // __webpack_public_path__
+            /******/__webpack_require__.p = "";
+            /******/
+            /******/ // Load entry module and return exports
+            /******/return __webpack_require__(__webpack_require__.s = 0);
+            /******/
+          }(
+          /************************************************************************/
+          /******/[
+          /* 0 */
+          /***/function (module, exports, __webpack_require__) {
+
+            "use strict";
+
+            var _createClass = function () {
+              function defineProperties(target, props) {
+                for (var i = 0; i < props.length; i++) {
+                  var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+                }
+              }return function (Constructor, protoProps, staticProps) {
+                if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+              };
+            }();
+
+            function _classCallCheck(instance, Constructor) {
+              if (!(instance instanceof Constructor)) {
+                throw new TypeError("Cannot call a class as a function");
+              }
+            }
+
+            var ChinaLocation = function () {
+              function ChinaLocation(locationData) {
+                _classCallCheck(this, ChinaLocation);
+
+                if (!(this instanceof ChinaLocation)) {
+                  return new ChinaLocation(locationData);
+                }
+
+                this.locationData = locationData;
+
+                this.currentProvinces = this.getProvinces();
+                var defaultProvince = this.currentProvinces[0];
+                this.currentCities = this.getCities(defaultProvince);
+                var defaultCity = this.currentCities[0];
+                this.currentDistricts = this.getDistricts(defaultCity, defaultProvince);
+
+                this.activeProvince = defaultProvince.code; //province code
+                this.activeCity = defaultCity.code; //city code
+                this.activeDistrict = this.currentDistricts[0].code; //district code
+              }
+
+              _createClass(ChinaLocation, [{
+                key: 'getProvinces',
+                value: function getProvinces() {
+                  var _this = this;
+
+                  var provinceKeys = Object.keys(this.locationData);
+                  var provinces = [];
+                  provinceKeys.forEach(function (provinceKey) {
+                    var provinceData = _this.locationData[provinceKey];
+                    provinces.push({
+                      code: provinceData.code,
+                      name: provinceData.name
+                    });
+                  });
+                  return provinces;
+                }
+              }, {
+                key: 'getCities',
+                value: function getCities(currentProvince) {
+                  var citiesObject = this.locationData[currentProvince.code].cities;
+                  var cityKeys = Object.keys(citiesObject);
+                  var cities = [];
+                  cityKeys.forEach(function (cityKey) {
+                    var cityData = citiesObject[cityKey];
+                    cities.push({
+                      code: cityData.code,
+                      name: cityData.name
+                    });
+                  });
+                  return cities;
+                }
+              }, {
+                key: 'getDistricts',
+                value: function getDistricts(currentCity, currentProvince) {
+                  var provincesObject = this.locationData[currentProvince.code];
+                  var currentCityObject = provincesObject.cities[currentCity.code];
+                  var districtsObject = currentCityObject.districts;
+                  var districtKeys = Object.keys(districtsObject);
+                  var districts = [];
+                  districtKeys.forEach(function (districtKey) {
+                    districts.push({
+                      code: districtKey,
+                      name: districtsObject[districtKey]
+                    });
+                  });
+                  return districts;
+                }
+              }, {
+                key: 'getProvinceByCode',
+                value: function getProvinceByCode(code) {
+                  return this.locationData[code];
+                }
+              }, {
+                key: 'getCityByCode',
+                value: function getCityByCode(cityCode, provinceCode) {
+                  return this.getProvinceByCode(provinceCode).cities[cityCode];
+                }
+              }, {
+                key: 'getDistrictByCode',
+                value: function getDistrictByCode(districtCode, cityCode, provinceCode) {
+                  return this.getCityByCode(cityCode, provinceCode).districts[districtCode];
+                }
+              }, {
+                key: 'getCity',
+                value: function getCity(code, cities) {
+                  return cities[code];
+                }
+              }, {
+                key: 'getDistrict',
+                value: function getDistrict(code, districts) {
+                  return districts[code];
+                }
+              }, {
+                key: 'changeLocation',
+                value: function changeLocation(provinceCode, cityCode, districtCode) {
+                  this.changeProvince.apply(this, arguments);
+                }
+              }, {
+                key: 'changeProvince',
+                value: function changeProvince(provinceCode, cityCode, districtCode) {
+                  var currentProvince = { code: provinceCode };
+                  var cities = this.getCities(currentProvince);
+                  var city = cities[0];
+                  if (cityCode) {
+                    var i = 0;
+                    for (; i < cities.length; i++) {
+                      var tempCity = cities[i];
+                      if (tempCity.code == cityCode) {
+                        city = tempCity;
+                        break;
+                      }
+                    }
+                  }
+                  // const districts = this.getDistricts(defaultCity, pObject);
+
+                  this.currentCities = cities;
+                  this.activeProvince = provinceCode;
+
+                  this.changeCity(city.code, districtCode);
+                  // this.currentDistricts = districts;
+                  // this.activeCity = defaultCity.code;
+                  // this.activeDistrict = districts[0].code;
+                }
+              }, {
+                key: 'changeCity',
+                value: function changeCity(cityCode, districtCode) {
+                  var districts = this.getDistricts({
+                    code: cityCode
+                  }, {
+                    code: this.activeProvince
+                  });
+
+                  this.currentDistricts = districts;
+                  this.activeCity = cityCode;
+
+                  var district = districts[0];
+                  if (districtCode) {
+                    var i = 0;
+                    for (; i < districts.length; i++) {
+                      var tempDistrict = districts[i];
+                      if (tempDistrict.code == districtCode) {
+                        district = tempDistrict;
+                        break;
+                      }
+                    }
+                  }
+
+                  this.changeDistrict(district.code);
+                  // this.activeDistrict = districts[0].code;
+                }
+              }, {
+                key: 'changeDistrict',
+                value: function changeDistrict(districtCode) {
+                  this.activeDistrict = districtCode;
+                }
+              }, {
+                key: 'getCurrentAddress',
+                value: function getCurrentAddress() {
+                  var originalProvince = this.getProvinceByCode(this.activeProvince);
+                  var originalCity = this.getCity(this.activeCity, originalProvince.cities);
+                  var originalDistrict = this.getDistrict(this.activeDistrict, originalCity.districts);
+
+                  return {
+                    province: {
+                      code: originalProvince.code,
+                      name: originalProvince.name
+                    },
+                    city: {
+                      code: originalCity.code,
+                      name: originalCity.name
+                    },
+                    district: {
+                      code: this.activeDistrict,
+                      name: originalDistrict
+                    }
+                  };
+                }
+              }, {
+                key: 'getCurrentProvinces',
+                value: function getCurrentProvinces() {
+                  return this.currentProvinces;
+                }
+              }, {
+                key: 'getCurrentCities',
+                value: function getCurrentCities() {
+                  return this.currentCities;
+                }
+              }, {
+                key: 'getCurrentDistricts',
+                value: function getCurrentDistricts() {
+                  return this.currentDistricts;
+                }
+              }]);
+
+              return ChinaLocation;
+            }();
+
+            module.exports = ChinaLocation;
+
+            /***/
+          }])
+        );
+      });
+      //# sourceMappingURL=china-location.js.map
+
+      /***/
+    },
+    /* 19 */
+    /***/function (module, exports, __webpack_require__) {
+
+      /**
+       * Copyright 2013-present, Facebook, Inc.
+       * All rights reserved.
+       *
+       * This source code is licensed under the BSD-style license found in the
+       * LICENSE file in the root directory of this source tree. An additional grant
+       * of patent rights can be found in the PATENTS file in the same directory.
+       */
+
+      if (true) {
+        var REACT_ELEMENT_TYPE = typeof Symbol === 'function' && Symbol.for && Symbol.for('react.element') || 0xeac7;
+
+        var isValidElement = function isValidElement(object) {
+          return (typeof object === 'undefined' ? 'undefined' : _typeof(object)) === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+        };
+
+        // By explicitly using `prop-types` you are opting into new development behavior.
+        // http://fb.me/prop-types-in-prod
+        var throwOnDirectAccess = true;
+        module.exports = __webpack_require__(12)(isValidElement, throwOnDirectAccess);
+      } else {
+        // By explicitly using `prop-types` you are opting into new production behavior.
+        // http://fb.me/prop-types-in-prod
+        module.exports = require('./factoryWithThrowingShims')();
+      }
+
+      /***/
+    },
+    /* 20 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      module.exports = __webpack_require__(27);
+
+      /***/
+    },
+    /* 21 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+
+      Object.defineProperty(exports, "__esModule", {
+        value: true
+      });
+
+      var _createClass = function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }return function (Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+        };
+      }();
+
+      var _react = __webpack_require__(20);
+
+      var _react2 = _interopRequireDefault(_react);
+
+      var _propTypes = __webpack_require__(19);
+
+      var _propTypes2 = _interopRequireDefault(_propTypes);
+
+      var _chinaLocation = __webpack_require__(18);
+
+      var _chinaLocation2 = _interopRequireDefault(_chinaLocation);
+
+      function _interopRequireDefault(obj) {
+        return obj && obj.__esModule ? obj : { default: obj };
+      }
+
+      function _classCallCheck(instance, Constructor) {
+        if (!(instance instanceof Constructor)) {
+          throw new TypeError("Cannot call a class as a function");
+        }
+      }
+
+      function _possibleConstructorReturn(self, call) {
+        if (!self) {
+          throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+        }return call && ((typeof call === 'undefined' ? 'undefined' : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+      }
+
+      function _inherits(subClass, superClass) {
+        if (typeof superClass !== "function" && superClass !== null) {
+          throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === 'undefined' ? 'undefined' : _typeof(superClass)));
+        }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+      }
+
+      var ChinaLocation = function (_React$Component) {
+        _inherits(ChinaLocation, _React$Component);
+
+        function ChinaLocation(props) {
+          _classCallCheck(this, ChinaLocation);
+
+          var _this = _possibleConstructorReturn(this, (ChinaLocation.__proto__ || Object.getPrototypeOf(ChinaLocation)).call(this, props));
+
+          if (!props.list) {
+            throw new Error('[ReactChinaLocation] location data "props.list" is required!');
+          }
+
+          _this.location = new _chinaLocation2.default(props.list);
+
+          _this.handleProvinceChange = _this.handleProvinceChange.bind(_this);
+          _this.handleCityChange = _this.handleCityChange.bind(_this);
+          _this.handleDistrictChange = _this.handleDistrictChange.bind(_this);
+          _this.updateLocationState = _this.updateLocationState.bind(_this);
+
+          _this.state = {
+            activeProvince: _this.location.activeProvince,
+            activeCity: _this.location.activeCity,
+            activeDistrict: _this.location.activeDistrict,
+            currentProvinces: _this.location.getCurrentProvinces(),
+            currentCities: _this.location.getCurrentCities(),
+            currentDistricts: _this.location.getCurrentDistricts()
+          };
+
+          return _this;
+        }
+
+        _createClass(ChinaLocation, [{
+          key: 'componentDidMount',
+          value: function componentDidMount() {
+            this.props.onLocationChange(this.location.getCurrentAddress());
+          }
+        }, {
+          key: 'handleProvinceChange',
+          value: function handleProvinceChange(e) {
+            var provinceCode = e.target.value;
+            this.location.changeProvince(provinceCode);
+            this.updateLocationState();
+            this.props.onLocationChange(this.location.getCurrentAddress());
+          }
+        }, {
+          key: 'handleCityChange',
+          value: function handleCityChange(e) {
+            this.location.changeCity(e.target.value);
+            this.setState({
+              activeCity: this.location.activeCity,
+              activeDistrict: this.location.activeDistrict,
+              currentDistricts: this.location.getCurrentDistricts()
+            });
+            this.props.onLocationChange(this.location.getCurrentAddress());
+          }
+        }, {
+          key: 'handleDistrictChange',
+          value: function handleDistrictChange(e) {
+            this.location.changeDistrict(e.target.value);
+            this.setState({
+              activeDistrict: this.location.activeDistrict
+            });
+            this.props.onLocationChange(this.location.getCurrentAddress());
+          }
+        }, {
+          key: 'updateLocationState',
+          value: function updateLocationState() {
+            this.setState({
+              activeProvince: this.location.activeProvince,
+              activeCity: this.location.activeCity,
+              activeDistrict: this.location.activeDistrict,
+              currentProvinces: this.location.getCurrentProvinces(),
+              currentCities: this.location.getCurrentCities(),
+              currentDistricts: this.location.getCurrentDistricts()
+            });
+          }
+        }, {
+          key: 'render',
+          value: function render() {
+            var customClass = this.props.customClass ? ' ' + this.props.customClass : '';
+            return _react2.default.createElement('div', { className: "china-location-wrapper" + customClass }, _react2.default.createElement('select', { value: this.state.activeProvince, onChange: this.handleProvinceChange }, this.state.currentProvinces.map(function (ele) {
+              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
+            })), _react2.default.createElement('select', { value: this.state.activeCity, onChange: this.handleCityChange }, this.state.currentCities.map(function (ele) {
+              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
+            })), _react2.default.createElement('select', { value: this.state.activeDistrict, onChange: this.handleDistrictChange }, this.state.currentDistricts.map(function (ele) {
+              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
+            })));
+          }
+        }]);
+
+        return ChinaLocation;
+      }(_react2.default.Component);
+
+      ChinaLocation.propTypes = {
+        onLocationChange: _propTypes2.default.func.isRequired,
+        list: _propTypes2.default.object.isRequired,
+        customClass: _propTypes2.default.string
+      };
+
+      exports.default = ChinaLocation;
+
+      /***/
+    },
+    /* 22 */
+    /***/function (module, exports) {
+
+      // shim for using process in browser
+      var process = module.exports = {};
+
+      // cached from whatever global is present so that test runners that stub it
+      // don't break things.  But we need to wrap it in a try catch in case it is
+      // wrapped in strict mode code which doesn't define any globals.  It's inside a
+      // function because try/catches deoptimize in certain engines.
+
+      var cachedSetTimeout;
+      var cachedClearTimeout;
+
+      function defaultSetTimout() {
+        throw new Error('setTimeout has not been defined');
+      }
+      function defaultClearTimeout() {
+        throw new Error('clearTimeout has not been defined');
+      }
+      (function () {
+        try {
+          if (typeof setTimeout === 'function') {
+            cachedSetTimeout = setTimeout;
+          } else {
+            cachedSetTimeout = defaultSetTimout;
+          }
+        } catch (e) {
+          cachedSetTimeout = defaultSetTimout;
+        }
+        try {
+          if (typeof clearTimeout === 'function') {
+            cachedClearTimeout = clearTimeout;
+          } else {
+            cachedClearTimeout = defaultClearTimeout;
+          }
+        } catch (e) {
+          cachedClearTimeout = defaultClearTimeout;
+        }
+      })();
+      function runTimeout(fun) {
+        if (cachedSetTimeout === setTimeout) {
+          //normal enviroments in sane situations
+          return setTimeout(fun, 0);
+        }
+        // if setTimeout wasn't available but was latter defined
+        if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+          cachedSetTimeout = setTimeout;
+          return setTimeout(fun, 0);
+        }
+        try {
+          // when when somebody has screwed with setTimeout but no I.E. maddness
+          return cachedSetTimeout(fun, 0);
+        } catch (e) {
+          try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+            return cachedSetTimeout.call(null, fun, 0);
+          } catch (e) {
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+            return cachedSetTimeout.call(this, fun, 0);
+          }
+        }
+      }
+      function runClearTimeout(marker) {
+        if (cachedClearTimeout === clearTimeout) {
+          //normal enviroments in sane situations
+          return clearTimeout(marker);
+        }
+        // if clearTimeout wasn't available but was latter defined
+        if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+          cachedClearTimeout = clearTimeout;
+          return clearTimeout(marker);
+        }
+        try {
+          // when when somebody has screwed with setTimeout but no I.E. maddness
+          return cachedClearTimeout(marker);
+        } catch (e) {
+          try {
+            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+            return cachedClearTimeout.call(null, marker);
+          } catch (e) {
+            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+            return cachedClearTimeout.call(this, marker);
+          }
+        }
+      }
+      var queue = [];
+      var draining = false;
+      var currentQueue;
+      var queueIndex = -1;
+
+      function cleanUpNextTick() {
+        if (!draining || !currentQueue) {
+          return;
+        }
+        draining = false;
+        if (currentQueue.length) {
+          queue = currentQueue.concat(queue);
+        } else {
+          queueIndex = -1;
+        }
+        if (queue.length) {
+          drainQueue();
+        }
+      }
+
+      function drainQueue() {
+        if (draining) {
+          return;
+        }
+        var timeout = runTimeout(cleanUpNextTick);
+        draining = true;
+
+        var len = queue.length;
+        while (len) {
+          currentQueue = queue;
+          queue = [];
+          while (++queueIndex < len) {
+            if (currentQueue) {
+              currentQueue[queueIndex].run();
+            }
+          }
+          queueIndex = -1;
+          len = queue.length;
+        }
+        currentQueue = null;
+        draining = false;
+        runClearTimeout(timeout);
+      }
+
+      process.nextTick = function (fun) {
+        var args = new Array(arguments.length - 1);
+        if (arguments.length > 1) {
+          for (var i = 1; i < arguments.length; i++) {
+            args[i - 1] = arguments[i];
+          }
+        }
+        queue.push(new Item(fun, args));
+        if (queue.length === 1 && !draining) {
+          runTimeout(drainQueue);
+        }
+      };
+
+      // v8 likes predictible objects
+      function Item(fun, array) {
+        this.fun = fun;
+        this.array = array;
+      }
+      Item.prototype.run = function () {
+        this.fun.apply(null, this.array);
+      };
+      process.title = 'browser';
+      process.browser = true;
+      process.env = {};
+      process.argv = [];
+      process.version = ''; // empty string to avoid regexp issues
+      process.versions = {};
+
+      function noop() {}
+
+      process.on = noop;
+      process.addListener = noop;
+      process.once = noop;
+      process.off = noop;
+      process.removeListener = noop;
+      process.removeAllListeners = noop;
+      process.emit = noop;
+      process.prependListener = noop;
+      process.prependOnceListener = noop;
+
+      process.listeners = function (name) {
+        return [];
+      };
+
+      process.binding = function (name) {
+        throw new Error('process.binding is not supported');
+      };
+
+      process.cwd = function () {
+        return '/';
+      };
+      process.chdir = function (dir) {
+        throw new Error('process.chdir is not supported');
+      };
+      process.umask = function () {
+        return 0;
+      };
+
+      /***/
+    },
+    /* 23 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+      /**
+       * Copyright 2013-present, Facebook, Inc.
+       * All rights reserved.
+       *
+       * This source code is licensed under the BSD-style license found in the
+       * LICENSE file in the root directory of this source tree. An additional grant
+       * of patent rights can be found in the PATENTS file in the same directory.
+       */
+
+      if (true) {
+        var invariant = __webpack_require__(1);
+        var warning = __webpack_require__(0);
+        var ReactPropTypesSecret = __webpack_require__(13);
+        var loggedTypeFailures = {};
+      }
+
+      /**
+       * Assert that the values match with the type specs.
+       * Error messages are memorized and will only be shown once.
+       *
+       * @param {object} typeSpecs Map of name to a ReactPropType
+       * @param {object} values Runtime values that need to be type-checked
+       * @param {string} location e.g. "prop", "context", "child context"
+       * @param {string} componentName Name of the component for error messages.
+       * @param {?Function} getStack Returns the component stack.
+       * @private
+       */
+      function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+        if (true) {
+          for (var typeSpecName in typeSpecs) {
+            if (typeSpecs.hasOwnProperty(typeSpecName)) {
+              var error;
+              // Prop type validation may throw. In case they do, we don't want to
+              // fail the render phase where it didn't fail before. So we log it.
+              // After these have been cleaned up, we'll let them throw.
+              try {
+                // This is intentionally an invariant that gets caught. It's the same
+                // behavior as without this statement except with a better message.
+                invariant(typeof typeSpecs[typeSpecName] === 'function', '%s: %s type `%s` is invalid; it must be a function, usually from ' + 'React.PropTypes.', componentName || 'React class', location, typeSpecName);
+                error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+              } catch (ex) {
+                error = ex;
+              }
+              warning(!error || error instanceof Error, '%s: type specification of %s `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error === 'undefined' ? 'undefined' : _typeof(error));
+              if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+                // Only monitor this failure once because there tends to be a lot of the
+                // same error.
+                loggedTypeFailures[error.message] = true;
+
+                var stack = getStack ? getStack() : '';
+
+                warning(false, 'Failed %s type: %s%s', location, error.message, stack != null ? stack : '');
+              }
+            }
+          }
+        }
+      }
+
+      module.exports = checkPropTypes;
+
+      /***/
+    },
     /* 24 */
+    /***/function (module, exports, __webpack_require__) {
+
+      "use strict";
+      /**
+       * Copyright 2013-present, Facebook, Inc.
+       * All rights reserved.
+       *
+       * This source code is licensed under the BSD-style license found in the
+       * LICENSE file in the root directory of this source tree. An additional grant
+       * of patent rights can be found in the PATENTS file in the same directory.
+       */
+
+      // React 15.5 references this module, and assumes PropTypes are still callable in production.
+      // Therefore we re-export development-only version with all the PropTypes checks here.
+      // However if one is migrating to the `prop-types` npm library, they will go through the
+      // `index.js` entry point, and it will branch depending on the environment.
+
+      var factory = __webpack_require__(12);
+      module.exports = function (isValidElement) {
+        // It is still allowed in 15.5.
+        var throwOnDirectAccess = false;
+        return factory(isValidElement, throwOnDirectAccess);
+      };
+
+      /***/
+    },
+    /* 25 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -3126,7 +3167,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 25 */
+    /* 26 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -3242,7 +3283,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 26 */
+    /* 27 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -3258,16 +3299,16 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       var _assign = __webpack_require__(4);
 
-      var ReactChildren = __webpack_require__(27);
+      var ReactChildren = __webpack_require__(28);
       var ReactComponent = __webpack_require__(9);
-      var ReactPureComponent = __webpack_require__(32);
-      var ReactClass = __webpack_require__(28);
-      var ReactDOMFactories = __webpack_require__(29);
+      var ReactPureComponent = __webpack_require__(33);
+      var ReactClass = __webpack_require__(29);
+      var ReactDOMFactories = __webpack_require__(30);
       var ReactElement = __webpack_require__(2);
-      var ReactPropTypes = __webpack_require__(30);
-      var ReactVersion = __webpack_require__(33);
+      var ReactPropTypes = __webpack_require__(31);
+      var ReactVersion = __webpack_require__(34);
 
-      var onlyChild = __webpack_require__(35);
+      var onlyChild = __webpack_require__(36);
       var warning = __webpack_require__(0);
 
       var createElement = ReactElement.createElement;
@@ -3276,7 +3317,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       if (true) {
         var canDefineProperty = __webpack_require__(6);
-        var ReactElementValidator = __webpack_require__(14);
+        var ReactElementValidator = __webpack_require__(15);
         var didWarnPropTypesDeprecated = false;
         createElement = ReactElementValidator.createElement;
         createFactory = ReactElementValidator.createFactory;
@@ -3350,7 +3391,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 27 */
+    /* 28 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -3364,11 +3405,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
        *
        */
 
-      var PooledClass = __webpack_require__(25);
+      var PooledClass = __webpack_require__(26);
       var ReactElement = __webpack_require__(2);
 
       var emptyFunction = __webpack_require__(7);
-      var traverseAllChildren = __webpack_require__(36);
+      var traverseAllChildren = __webpack_require__(37);
 
       var twoArgumentPooler = PooledClass.twoArgumentPooler;
       var fourArgumentPooler = PooledClass.fourArgumentPooler;
@@ -3544,7 +3585,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 28 */
+    /* 29 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -3563,7 +3604,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       var ReactComponent = __webpack_require__(9);
       var ReactElement = __webpack_require__(2);
-      var ReactPropTypeLocationNames = __webpack_require__(15);
+      var ReactPropTypeLocationNames = __webpack_require__(16);
       var ReactNoopUpdateQueue = __webpack_require__(11);
 
       var emptyObject = __webpack_require__(8);
@@ -3871,11 +3912,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             Constructor.getDefaultProps = _getDefaultProps;
           }
         },
-        propTypes: function propTypes(Constructor, _propTypes) {
+        propTypes: function propTypes(Constructor, _propTypes3) {
           if (true) {
-            validateTypeDef(Constructor, _propTypes, 'prop');
+            validateTypeDef(Constructor, _propTypes3, 'prop');
           }
-          Constructor.propTypes = _assign({}, Constructor.propTypes, _propTypes);
+          Constructor.propTypes = _assign({}, Constructor.propTypes, _propTypes3);
         },
         statics: function statics(Constructor, _statics) {
           mixStaticSpecIntoComponent(Constructor, _statics);
@@ -4270,7 +4311,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 29 */
+    /* 30 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -4293,7 +4334,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
        */
       var createDOMFactory = ReactElement.createFactory;
       if (true) {
-        var ReactElementValidator = __webpack_require__(14);
+        var ReactElementValidator = __webpack_require__(15);
         createDOMFactory = ReactElementValidator.createFactory;
       }
 
@@ -4444,7 +4485,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 30 */
+    /* 31 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -4461,13 +4502,13 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       var _require = __webpack_require__(2),
           isValidElement = _require.isValidElement;
 
-      var factory = __webpack_require__(22);
+      var factory = __webpack_require__(24);
 
       module.exports = factory(isValidElement);
 
       /***/
     },
-    /* 31 */
+    /* 32 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -4488,7 +4529,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 32 */
+    /* 33 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -4534,7 +4575,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 33 */
+    /* 34 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -4552,7 +4593,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 34 */
+    /* 35 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -4570,8 +4611,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         var _prodInvariant = __webpack_require__(3);
 
-        var ReactPropTypeLocationNames = __webpack_require__(15);
-        var ReactPropTypesSecret = __webpack_require__(31);
+        var ReactPropTypeLocationNames = __webpack_require__(16);
+        var ReactPropTypesSecret = __webpack_require__(32);
 
         var invariant = __webpack_require__(1);
         var warning = __webpack_require__(0);
@@ -4643,11 +4684,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
         module.exports = checkReactTypeSpec;
         /* WEBPACK VAR INJECTION */
-      }).call(exports, __webpack_require__(20));
+      }).call(exports, __webpack_require__(22));
 
       /***/
     },
-    /* 35 */
+    /* 36 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -4690,7 +4731,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
       /***/
     },
-    /* 36 */
+    /* 37 */
     /***/function (module, exports, __webpack_require__) {
 
       "use strict";
@@ -4707,11 +4748,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       var _prodInvariant = __webpack_require__(3);
 
       var ReactCurrentOwner = __webpack_require__(5);
-      var REACT_ELEMENT_TYPE = __webpack_require__(13);
+      var REACT_ELEMENT_TYPE = __webpack_require__(14);
 
-      var getIteratorFn = __webpack_require__(16);
+      var getIteratorFn = __webpack_require__(17);
       var invariant = __webpack_require__(1);
-      var KeyEscapeUtils = __webpack_require__(24);
+      var KeyEscapeUtils = __webpack_require__(25);
       var warning = __webpack_require__(0);
 
       var SEPARATOR = '.';
@@ -4941,7 +4982,11 @@ var App = function (_React$Component) {
       return _react2.default.createElement(
         'div',
         null,
-        _react2.default.createElement(_reactChinaLocation2.default, { list: _location2.default, onLocationChange: this.onLocationChange }),
+        _react2.default.createElement(_reactChinaLocation2.default, {
+          customClass: 'custom-china-location',
+          list: _location2.default,
+          onLocationChange: this.onLocationChange
+        }),
         _react2.default.createElement(
           'p',
           null,

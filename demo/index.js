@@ -26,7 +26,11 @@ class App extends React.Component {
   render () {
     return (
       <div>
-        <ChinaLocation list={locationData} onLocationChange={this.onLocationChange}/>
+        <ChinaLocation
+          customClass="custom-china-location"
+          list={locationData}
+          onLocationChange={this.onLocationChange}
+        />
         <p>
           Current Location: {this.state.formattedLocation}
         </p>

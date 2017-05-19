@@ -2535,7 +2535,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                   this.currentCities = cities;
                   this.activeProvince = provinceCode;
 
-                  this.changeCity(city.code, districtCode);
+                  this.changeCity(city ? city.code : '', districtCode);
                   // this.currentDistricts = districts;
                   // this.activeCity = defaultCity.code;
                   // this.activeDistrict = districts[0].code;
@@ -2564,7 +2564,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     }
                   }
 
-                  this.changeDistrict(district.code);
+                  this.changeDistrict(district ? district.code : '');
                   // this.activeDistrict = districts[0].code;
                 }
               }, {
@@ -2590,7 +2590,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                     },
                     district: {
                       code: this.activeDistrict,
-                      name: originalDistrict
+                      name: originalDistrict || ''
                     }
                   };
                 }

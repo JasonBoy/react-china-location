@@ -1,6 +1,6 @@
 {
   "name": "react-china-location",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "React Component for china-location",
   "main": "dist/react-china-location.js",
   "main:next": "src/ChinaLocation.js",
@@ -32,7 +32,7 @@
     "prop-types": "^15.5.9"
   },
   "peerDependencies": {
-    "china-location": "^0.0.4",
+    "china-location": "^0.0.5",
     "react": "^15.5.4"
   },
   "devDependencies": {

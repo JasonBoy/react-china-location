@@ -1,5 +1,5 @@
 # react-china-location [![npm](https://img.shields.io/npm/v/react-china-location.svg)](https://www.npmjs.com/package/react-china-location)
-React Component for [china-location](https://github.com/JasonBoy/data_location)
+React Component for [china-location](https://github.com/JasonBoy/china-location)
 
 It uses the simple html select/option tag,
 to use custom UI, install the `china-location` only and make your own UI component.

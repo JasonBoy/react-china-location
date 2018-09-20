@@ -32,8 +32,8 @@
     "prop-types": "^15.5.9"
   },
   "peerDependencies": {
-    "china-location": "^1.0.2",
-    "react": "^15.5.4"
+    "china-location": "^1.0.4",
+    "react": ">=15.5"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
@@ -44,7 +44,7 @@
     "chai": "^3.5.0",
     "html-webpack-plugin": "^2.28.0",
     "mocha": "^3.3.0",
-    "react-dom": "^15.5.4",
+    "react-dom": ">=15.5",
     "webpack": "^2.5.1"
   }
 }

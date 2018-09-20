@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import ChinaLocation from '../dist/react-china-location';
+// import ChinaLocation from '../src/ChinaLocation';
 import locationData from 'china-location/dist/location.json';
 
 class App extends React.Component {
@@ -27,7 +28,7 @@ class App extends React.Component {
     return (
       <div>
         <ChinaLocation
-          customClass="custom-china-location"
+          className="custom-china-location"
           list={locationData}
           onLocationChange={this.onLocationChange}
         />

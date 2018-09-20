@@ -1,6 +1,6 @@
 {
   "name": "react-china-location",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "React Component for china-location",
   "main": "dist/react-china-location.js",
   "main:next": "src/ChinaLocation.js",

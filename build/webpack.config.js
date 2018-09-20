@@ -12,7 +12,48 @@ const config = {
     filename: PROD_MODE ? 'react-china-location.min.js' : 'react-china-location.js',
     library: 'ReactChinaLocation',
     libraryTarget: 'umd',
+    umdNamedDefine: true,
   },
+  externals: {
+    react: 'react',
+    'react-dom': 'react-dom',
+    'prop-types': 'prop-types',
+    'china-location': 'china-location',
+  },
+  /*externals: {
+    react: {
+      commonjs: "react",
+      commonjs2: "react",
+      amd: "React",
+      root: "React"
+    },
+    "react-dom": {
+      commonjs: "react-dom",
+      commonjs2: "react-dom",
+      amd: "ReactDOM",
+      root: "ReactDOM"
+    },
+    "prop-types": {
+      commonjs: "prop-types",
+      commonjs2: "prop-types",
+      amd: "PropTypes",
+      root: "PropTypes"
+    },
+    'china-location': {
+      commonjs2: 'china-location',
+      commonjs: 'china-location',
+      amd: 'ChinaLocation',
+      root: 'ChinaLocation',
+    },
+  },*/
+  // resolve: {
+  //   alias: {
+  //     'react': path.resolve(__dirname, '../node_modules/react') ,
+  //     'react-dom': path.resolve(__dirname, '../node_modules/react-dom'),
+  //     'prop-types': path.resolve(__dirname, '../node_modules/prop-types'),
+  //     'china-location': path.resolve(__dirname, '../node_modules/china-location'),
+  //   }
+  // },
   module: {
     rules: [
       {
@@ -32,7 +73,7 @@ const config = {
       }
     }),
   ],
-  devtool: 'source-map',
+  // devtool: 'source-map',
 };
 
 if(PROD_MODE) {

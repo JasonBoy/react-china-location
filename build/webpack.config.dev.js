@@ -9,8 +9,8 @@ const entry = path.resolve(__dirname, '../demo/index.js');
 
 const config = {
   entry: {
-    vendors: ['react', 'react-dom', 'china-location'],
-    'data-location': ['china-location/dist/location.json'],
+    // vendors: ['react', 'react-dom', 'prop-types', 'china-location'],
+    // 'data-location': ['china-location/dist/location.json'],
     app: entry,
   },
   output: {
@@ -35,10 +35,10 @@ const config = {
         'NODE_ENV': JSON.stringify(PROD_MODE ? 'production' : 'development')
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin({
-      names: ['vendors', 'data-location'],
-      minChunks: Infinity
-    }),
+    // new webpack.optimize.CommonsChunkPlugin({
+    //   names: ['vendors', 'data-location'],
+    //   minChunks: Infinity
+    // }),
     new HtmlWebpackPlugin({
       template: './demo/index.html',
       filename: 'index.html',
@@ -46,7 +46,7 @@ const config = {
       chunksSortMode: 'dependency'
     }),
   ],
-  devtool: 'source-map',
+  // devtool: 'source-map',
 };
 
 if(PROD_MODE) {

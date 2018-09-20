@@ -69,9 +69,9 @@ class ChinaLocation extends React.Component {
   }
 
   render () {
-    const customClass = this.props.customClass ? ' ' + this.props.customClass : '';
+    const className = this.props.className ? ' ' + this.props.className : '';
     return (
-      <div className={"china-location-wrapper" + customClass}>
+      <div className={"china-location-wrapper" + className}>
         <select value={this.state.activeProvince} onChange={this.handleProvinceChange}>
           {
             this.state.currentProvinces.map((ele) => {
@@ -101,7 +101,7 @@ class ChinaLocation extends React.Component {
 ChinaLocation.propTypes = {
   onLocationChange: PropTypes.func.isRequired,
   list: PropTypes.object.isRequired,
-  customClass: PropTypes.string,
+  className: PropTypes.string,
 };
 
 export default ChinaLocation;

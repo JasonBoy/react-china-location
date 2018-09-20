@@ -74,22 +74,22 @@ class ChinaLocation extends React.Component {
       <div className={"china-location-wrapper" + className}>
         <select value={this.state.activeProvince} onChange={this.handleProvinceChange}>
           {
-            this.state.currentProvinces.map((ele) => {
-              return <option key={ele.code} value={ele.code}>{ele.name}</option>;
+            this.state.currentProvinces.map((ele, index) => {
+              return <option key={index} value={ele.code}>{ele.name}</option>;
             })
           }
         </select>
         <select value={this.state.activeCity} onChange={this.handleCityChange}>
           {
-            this.state.currentCities.map((ele) => {
-              return <option key={ele.code} value={ele.code}>{ele.name}</option>;
+            this.state.currentCities.map((ele, index) => {
+              return <option key={index} value={ele.code}>{ele.name}</option>;
             })
           }
         </select>
         <select value={this.state.activeDistrict} onChange={this.handleDistrictChange}>
           {
-            this.state.currentDistricts.map((ele) => {
-              return <option key={ele.code} value={ele.code}>{ele.name}</option>;
+            this.state.currentDistricts.map((ele, index) => {
+              return <option key={index} value={ele.code}>{ele.name}</option>;
             })
           }
         </select>

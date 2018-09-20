@@ -962,12 +962,12 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           key: 'render',
           value: function render() {
             var className = this.props.className ? ' ' + this.props.className : '';
-            return _react2.default.createElement('div', { className: "china-location-wrapper" + className }, _react2.default.createElement('select', { value: this.state.activeProvince, onChange: this.handleProvinceChange }, this.state.currentProvinces.map(function (ele) {
-              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
-            })), _react2.default.createElement('select', { value: this.state.activeCity, onChange: this.handleCityChange }, this.state.currentCities.map(function (ele) {
-              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
-            })), _react2.default.createElement('select', { value: this.state.activeDistrict, onChange: this.handleDistrictChange }, this.state.currentDistricts.map(function (ele) {
-              return _react2.default.createElement('option', { key: ele.code, value: ele.code }, ele.name);
+            return _react2.default.createElement('div', { className: "china-location-wrapper" + className }, _react2.default.createElement('select', { value: this.state.activeProvince, onChange: this.handleProvinceChange }, this.state.currentProvinces.map(function (ele, index) {
+              return _react2.default.createElement('option', { key: index, value: ele.code }, ele.name);
+            })), _react2.default.createElement('select', { value: this.state.activeCity, onChange: this.handleCityChange }, this.state.currentCities.map(function (ele, index) {
+              return _react2.default.createElement('option', { key: index, value: ele.code }, ele.name);
+            })), _react2.default.createElement('select', { value: this.state.activeDistrict, onChange: this.handleDistrictChange }, this.state.currentDistricts.map(function (ele, index) {
+              return _react2.default.createElement('option', { key: index, value: ele.code }, ele.name);
             })));
           }
         }]);

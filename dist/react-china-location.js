@@ -213,10 +213,10 @@ var ChinaLocation = function (_React$Component) {
         _react2.default.createElement(
           'select',
           { value: this.state.activeProvince, onChange: this.handleProvinceChange },
-          this.state.currentProvinces.map(function (ele) {
+          this.state.currentProvinces.map(function (ele, index) {
             return _react2.default.createElement(
               'option',
-              { key: ele.code, value: ele.code },
+              { key: index, value: ele.code },
               ele.name
             );
           })
@@ -224,10 +224,10 @@ var ChinaLocation = function (_React$Component) {
         _react2.default.createElement(
           'select',
           { value: this.state.activeCity, onChange: this.handleCityChange },
-          this.state.currentCities.map(function (ele) {
+          this.state.currentCities.map(function (ele, index) {
             return _react2.default.createElement(
               'option',
-              { key: ele.code, value: ele.code },
+              { key: index, value: ele.code },
               ele.name
             );
           })
@@ -235,10 +235,10 @@ var ChinaLocation = function (_React$Component) {
         _react2.default.createElement(
           'select',
           { value: this.state.activeDistrict, onChange: this.handleDistrictChange },
-          this.state.currentDistricts.map(function (ele) {
+          this.state.currentDistricts.map(function (ele, index) {
             return _react2.default.createElement(
               'option',
-              { key: ele.code, value: ele.code },
+              { key: index, value: ele.code },
               ele.name
             );
           })

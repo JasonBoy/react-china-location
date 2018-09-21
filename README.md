@@ -8,7 +8,7 @@ to use custom UI, install the `china-location` only and make your own UI compone
 
 ## Usage
 
-`npm install china-location react-china-location --save` or
+`npm install china-location react-china-location --save` or  
 `yarn add china-location react-china-location`
 
 ```javascript
@@ -40,17 +40,21 @@ class App extends React.Component {
   }
 
   render () {
-    <div>
-      <ChinaLocation list={locationData} onLocationChange={this.onLocationChange}/>
-    </div>
+    return (
+      <ChinaLocation className="custom-china-location" 
+                     list={locationData} 
+                     onLocationChange={this.onLocationChange}
+      />
+    )
   }
 }
 ```
 
 ### Props
 
-- list: location data from `china-location`
-- onLocationChange: be notified when user select different option
+- `className<string>`: pass custom css class to the component root element
+- `list<object>`: location data from `china-location`
+- `onLocationChange<function>`: be notified when user select different option
 
 ## Demo
 

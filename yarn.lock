@@ -830,9 +830,10 @@ chalk@^1.1.0:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-china-location@^1.0.4:
-  version "1.0.4"
-  resolved "http://registry.npm.taobao.org/china-location/download/china-location-1.0.4.tgz#d7dbb802b2cbca9def0f0665cd6832abb175a7de"
+china-location@^2.0.0:
+  version "2.0.0"
+  resolved "http://nexus.qutoutiao.net/repository/qtt/china-location/-/china-location-2.0.0.tgz#a64a307e393921889d020c2c992de622db67b1b2"
+  integrity sha512-5VUNUPJ5CytDZSy1+/Bj9uku7FvVUm1LukPRMalqbEU1Y16U34BVs5Qo6Oc6yqRrYmQbtUOQaPmA1tQjNd0piQ==
 
 chokidar@^1.4.3, chokidar@^1.6.1:
   version "1.7.0"

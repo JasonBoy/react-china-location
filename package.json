@@ -1,6 +1,6 @@
 {
   "name": "react-china-location",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "React Component for china-location",
   "main": "dist/react-china-location.js",
   "main:next": "src/ChinaLocation.js",
@@ -30,7 +30,7 @@
   "homepage": "https://github.com/JasonBoy/react-china-location#readme",
   "dependencies": {},
   "peerDependencies": {
-    "china-location": "^1.0.4",
+    "china-location": "^2.0.0",
     "react": ">=15.5",
     "react-dom": ">=15.5",
     "prop-types": "^15.5.9"
@@ -46,7 +46,7 @@
     "mocha": "^3.3.0",
     "react-dom": ">=15.5",
     "webpack": "^2.5.1",
-    "china-location": "^1.0.4",
+    "china-location": "^2.0.0",
     "react": ">=15.5",
     "prop-types": "^15.5.9"
   }

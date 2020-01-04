@@ -82,301 +82,13 @@ if (false) {
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
-
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(true)
-		module.exports = factory();
-	else if(typeof define === 'function' && define.amd)
-		define([], factory);
-	else if(typeof exports === 'object')
-		exports["ChinaLocation"] = factory();
-	else
-		root["ChinaLocation"] = factory();
-})(this, function() {
-return /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// identity function for calling harmony imports with the correct context
-/******/ 	__webpack_require__.i = function(value) { return value; };
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, {
-/******/ 				configurable: false,
-/******/ 				enumerable: true,
-/******/ 				get: getter
-/******/ 			});
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
-/******/ })
-/************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+class t{constructor(i){if(!(this instanceof t))return new t(i);this.locationData=i,this.currentProvinces=this.getProvinces();var e=this.currentProvinces[0];this.currentCities=this.getCities(e);var r=this.currentCities[0];this.currentDistricts=this.getDistricts(r,e),this.activeProvince=e.code,this.activeCity=r.code,this.activeDistrict=this.currentDistricts[0].code}getProvinces(){var t=Object.keys(this.locationData),i=[];return t.forEach(t=>{var e=this.locationData[t];i.push({code:e.code,name:e.name})}),i}getCities(t){var i=this.locationData[t.code].cities,e=Object.keys(i),r=[];return e.forEach(t=>{var e=i[t];r.push({code:e.code,name:e.name})}),r}getDistricts(t,i){var e=this.locationData[i.code].cities[t.code].districts,r=Object.keys(e),c=[];return r.forEach(t=>{c.push({code:t,name:e[t]})}),c}getProvinceByCode(t){return this.locationData[t]}getCityByCode(t,i){return this.getProvinceByCode(i).cities[t]}getDistrictByCode(t,i,e){return this.getCityByCode(i,e).districts[t]}getCity(t,i){return i[t]}getDistrict(t,i){return i[t]}changeLocation(t,i,e){return this.changeProvince(t,i,e),this}changeProvince(t,i,e){var r=this.getCities({code:t}),c=r[0];if(i)for(var s=0;s<r.length;s++){var n=r[s];if(n.code==i){c=n;break}}this.currentCities=r,this.activeProvince=t,this.changeCity(c?c.code:"",e)}changeCity(t,i){var e=this.getDistricts({code:t},{code:this.activeProvince});this.currentDistricts=e,this.activeCity=t;var r=e[0];if(i)for(var c=0;c<e.length;c++){var s=e[c];if(s.code==i){r=s;break}}this.changeDistrict(r?r.code:"")}changeDistrict(t){this.activeDistrict=t}getCurrentAddress(){var t=this.getProvinceByCode(this.activeProvince),i=this.getCity(this.activeCity,t.cities),e=this.getDistrict(this.activeDistrict,i.districts);return{province:{code:t.code,name:t.name},city:{code:i.code,name:i.name},district:{code:this.activeDistrict,name:e||""}}}getCurrentProvinces(){return this.currentProvinces}getCurrentCities(){return this.currentCities}getCurrentDistricts(){return this.currentDistricts}}/* harmony default export */ __webpack_exports__["default"] = (t);
+//# sourceMappingURL=ChinaLocation.modern.mjs.map
 
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ChinaLocation = function () {
-  function ChinaLocation(locationData) {
-    _classCallCheck(this, ChinaLocation);
-
-    if (!(this instanceof ChinaLocation)) {
-      return new ChinaLocation(locationData);
-    }
-
-    this.locationData = locationData;
-
-    this.currentProvinces = this.getProvinces();
-    var defaultProvince = this.currentProvinces[0];
-    this.currentCities = this.getCities(defaultProvince);
-    var defaultCity = this.currentCities[0];
-    this.currentDistricts = this.getDistricts(defaultCity, defaultProvince);
-
-    this.activeProvince = defaultProvince.code; //province code
-    this.activeCity = defaultCity.code; //city code
-    this.activeDistrict = this.currentDistricts[0].code; //district code
-  }
-
-  _createClass(ChinaLocation, [{
-    key: 'getProvinces',
-    value: function getProvinces() {
-      var _this = this;
-
-      var provinceKeys = Object.keys(this.locationData);
-      var provinces = [];
-      provinceKeys.forEach(function (provinceKey) {
-        var provinceData = _this.locationData[provinceKey];
-        provinces.push({
-          code: provinceData.code,
-          name: provinceData.name
-        });
-      });
-      return provinces;
-    }
-  }, {
-    key: 'getCities',
-    value: function getCities(currentProvince) {
-      var citiesObject = this.locationData[currentProvince.code].cities;
-      var cityKeys = Object.keys(citiesObject);
-      var cities = [];
-      cityKeys.forEach(function (cityKey) {
-        var cityData = citiesObject[cityKey];
-        cities.push({
-          code: cityData.code,
-          name: cityData.name
-        });
-      });
-      return cities;
-    }
-  }, {
-    key: 'getDistricts',
-    value: function getDistricts(currentCity, currentProvince) {
-      var provincesObject = this.locationData[currentProvince.code];
-      var currentCityObject = provincesObject.cities[currentCity.code];
-      var districtsObject = currentCityObject.districts;
-      var districtKeys = Object.keys(districtsObject);
-      var districts = [];
-      districtKeys.forEach(function (districtKey) {
-        districts.push({
-          code: districtKey,
-          name: districtsObject[districtKey]
-        });
-      });
-      return districts;
-    }
-  }, {
-    key: 'getProvinceByCode',
-    value: function getProvinceByCode(code) {
-      return this.locationData[code];
-    }
-  }, {
-    key: 'getCityByCode',
-    value: function getCityByCode(cityCode, provinceCode) {
-      return this.getProvinceByCode(provinceCode).cities[cityCode];
-    }
-  }, {
-    key: 'getDistrictByCode',
-    value: function getDistrictByCode(districtCode, cityCode, provinceCode) {
-      return this.getCityByCode(cityCode, provinceCode).districts[districtCode];
-    }
-  }, {
-    key: 'getCity',
-    value: function getCity(code, cities) {
-      return cities[code];
-    }
-  }, {
-    key: 'getDistrict',
-    value: function getDistrict(code, districts) {
-      return districts[code];
-    }
-  }, {
-    key: 'changeLocation',
-    value: function changeLocation(provinceCode, cityCode, districtCode) {
-      this.changeProvince.apply(this, arguments);
-    }
-  }, {
-    key: 'changeProvince',
-    value: function changeProvince(provinceCode, cityCode, districtCode) {
-      var currentProvince = { code: provinceCode };
-      var cities = this.getCities(currentProvince);
-      var city = cities[0];
-      if (cityCode) {
-        var i = 0;
-        for (; i < cities.length; i++) {
-          var tempCity = cities[i];
-          if (tempCity.code == cityCode) {
-            city = tempCity;
-            break;
-          }
-        }
-      }
-      // const districts = this.getDistricts(defaultCity, pObject);
-
-      this.currentCities = cities;
-      this.activeProvince = provinceCode;
-
-      this.changeCity(city ? city.code : '', districtCode);
-      // this.currentDistricts = districts;
-      // this.activeCity = defaultCity.code;
-      // this.activeDistrict = districts[0].code;
-    }
-  }, {
-    key: 'changeCity',
-    value: function changeCity(cityCode, districtCode) {
-      var districts = this.getDistricts({
-        code: cityCode
-      }, {
-        code: this.activeProvince
-      });
-
-      this.currentDistricts = districts;
-      this.activeCity = cityCode;
-
-      var district = districts[0];
-      if (districtCode) {
-        var i = 0;
-        for (; i < districts.length; i++) {
-          var tempDistrict = districts[i];
-          if (tempDistrict.code == districtCode) {
-            district = tempDistrict;
-            break;
-          }
-        }
-      }
-
-      this.changeDistrict(district ? district.code : '');
-      // this.activeDistrict = districts[0].code;
-    }
-  }, {
-    key: 'changeDistrict',
-    value: function changeDistrict(districtCode) {
-      this.activeDistrict = districtCode;
-    }
-  }, {
-    key: 'getCurrentAddress',
-    value: function getCurrentAddress() {
-      var originalProvince = this.getProvinceByCode(this.activeProvince);
-      var originalCity = this.getCity(this.activeCity, originalProvince.cities);
-      var originalDistrict = this.getDistrict(this.activeDistrict, originalCity.districts);
-
-      return {
-        province: {
-          code: originalProvince.code,
-          name: originalProvince.name
-        },
-        city: {
-          code: originalCity.code,
-          name: originalCity.name
-        },
-        district: {
-          code: this.activeDistrict,
-          name: originalDistrict || ''
-        }
-      };
-    }
-  }, {
-    key: 'getCurrentProvinces',
-    value: function getCurrentProvinces() {
-      return this.currentProvinces;
-    }
-  }, {
-    key: 'getCurrentCities',
-    value: function getCurrentCities() {
-      return this.currentCities;
-    }
-  }, {
-    key: 'getCurrentDistricts',
-    value: function getCurrentDistricts() {
-      return this.currentDistricts;
-    }
-  }]);
-
-  return ChinaLocation;
-}();
-
-module.exports = ChinaLocation;
-
-/***/ })
-/******/ ]);
-});
-//# sourceMappingURL=china-location.js.map
 
 /***/ }),
 /* 2 */
@@ -1093,13 +805,13 @@ module.exports = {
 					"130207": "丰南区",
 					"130208": "丰润区",
 					"130209": "曹妃甸区",
-					"130223": "滦县",
 					"130224": "滦南县",
 					"130225": "乐亭县",
 					"130227": "迁西县",
 					"130229": "玉田县",
 					"130281": "遵化市",
-					"130283": "迁安市"
+					"130283": "迁安市",
+					"130284": "滦州市"
 				}
 			},
 			"130300": {
@@ -1314,17 +1026,16 @@ module.exports = {
 				"code": "140200",
 				"name": "大同市",
 				"districts": {
-					"140202": "城区",
-					"140203": "矿区",
-					"140211": "南郊区",
 					"140212": "新荣区",
+					"140213": "平城区",
+					"140214": "云冈区",
+					"140215": "云州区",
 					"140221": "阳高县",
 					"140222": "天镇县",
 					"140223": "广灵县",
 					"140224": "灵丘县",
 					"140225": "浑源县",
-					"140226": "左云县",
-					"140227": "大同县"
+					"140226": "左云县"
 				}
 			},
 			"140300": {
@@ -1342,19 +1053,18 @@ module.exports = {
 				"code": "140400",
 				"name": "长治市",
 				"districts": {
-					"140402": "城区",
-					"140411": "郊区",
-					"140421": "长治县",
+					"140403": "潞州区",
+					"140404": "上党区",
+					"140405": "屯留区",
+					"140406": "潞城区",
 					"140423": "襄垣县",
-					"140424": "屯留县",
 					"140425": "平顺县",
 					"140426": "黎城县",
 					"140427": "壶关县",
 					"140428": "长子县",
 					"140429": "武乡县",
 					"140430": "沁县",
-					"140431": "沁源县",
-					"140481": "潞城市"
+					"140431": "沁源县"
 				}
 			},
 			"140500": {
@@ -1378,7 +1088,7 @@ module.exports = {
 					"140621": "山阴县",
 					"140622": "应县",
 					"140623": "右玉县",
-					"140624": "怀仁县"
+					"140681": "怀仁市"
 				}
 			},
 			"140700": {
@@ -2177,9 +1887,9 @@ module.exports = {
 				"code": "232700",
 				"name": "大兴安岭地区",
 				"districts": {
+					"232701": "漠河市",
 					"232721": "呼玛县",
-					"232722": "塔河县",
-					"232723": "漠河县"
+					"232722": "塔河县"
 				}
 			}
 		}
@@ -2296,11 +2006,11 @@ module.exports = {
 					"320602": "崇川区",
 					"320611": "港闸区",
 					"320612": "通州区",
-					"320621": "海安市",
 					"320623": "如东县",
 					"320681": "启东市",
 					"320682": "如皋市",
-					"320684": "海门市"
+					"320684": "海门市",
+					"320685": "海安市"
 				}
 			},
 			"320700": {
@@ -2652,12 +2362,12 @@ module.exports = {
 					"340803": "大观区",
 					"340811": "宜秀区",
 					"340822": "怀宁县",
-					"340824": "潜山县",
 					"340825": "太湖县",
 					"340826": "宿松县",
 					"340827": "望江县",
 					"340828": "岳西县",
-					"340881": "桐城市"
+					"340881": "桐城市",
+					"340882": "潜山市"
 				}
 			},
 			"341000": {
@@ -2977,7 +2687,7 @@ module.exports = {
 				"name": "鹰潭市",
 				"districts": {
 					"360602": "月湖区",
-					"360622": "余江县",
+					"360603": "余江区",
 					"360681": "贵溪市"
 				}
 			},
@@ -3092,8 +2802,10 @@ module.exports = {
 					"370112": "历城区",
 					"370113": "长清区",
 					"370114": "章丘区",
+					"370115": "济阳区",
+					"370116": "莱芜区",
+					"370117": "钢城区",
 					"370124": "平阴县",
-					"370125": "济阳县",
 					"370126": "商河县"
 				}
 			},
@@ -3162,6 +2874,7 @@ module.exports = {
 					"370681": "龙口市",
 					"370682": "莱阳市",
 					"370683": "莱州市",
+					"370684": "蓬莱市",
 					"370685": "招远市",
 					"370686": "栖霞市",
 					"370687": "海阳市"
@@ -3234,14 +2947,6 @@ module.exports = {
 					"371122": "莒县"
 				}
 			},
-			"371200": {
-				"code": "371200",
-				"name": "莱芜市",
-				"districts": {
-					"371202": "莱城区",
-					"371203": "钢城区"
-				}
-			},
 			"371300": {
 				"code": "371300",
 				"name": "临沂市",
@@ -3301,7 +3006,7 @@ module.exports = {
 					"371622": "阳信县",
 					"371623": "无棣县",
 					"371625": "博兴县",
-					"371626": "邹平县"
+					"371681": "邹平市"
 				}
 			},
 			"371700": {
@@ -3684,9 +3389,9 @@ module.exports = {
 				"districts": {
 					"420802": "东宝区",
 					"420804": "掇刀区",
-					"420821": "京山县",
 					"420822": "沙洋县",
-					"420881": "钟祥市"
+					"420881": "钟祥市",
+					"420882": "京山市"
 				}
 			},
 			"420900": {
@@ -3796,7 +3501,7 @@ module.exports = {
 					"430203": "芦淞区",
 					"430204": "石峰区",
 					"430211": "天元区",
-					"430221": "株洲县",
+					"430212": "渌口区",
 					"430223": "攸县",
 					"430224": "茶陵县",
 					"430225": "炎陵县",
@@ -4029,7 +3734,8 @@ module.exports = {
 					"440307": "龙岗区",
 					"440308": "盐田区",
 					"440309": "龙华区",
-					"440310": "坪山区"
+					"440310": "坪山区",
+					"440311": "光明区"
 				}
 			},
 			"440400": {
@@ -4289,8 +3995,8 @@ module.exports = {
 					"450328": "龙胜各族自治县",
 					"450329": "资源县",
 					"450330": "平乐县",
-					"450331": "荔浦县",
-					"450332": "恭城瑶族自治县"
+					"450332": "恭城瑶族自治县",
+					"450381": "荔浦市"
 				}
 			},
 			"450400": {
@@ -4463,7 +4169,7 @@ module.exports = {
 				"districts": {
 					"460321": "西沙群岛",
 					"460322": "南沙群岛",
-					"460323": "中沙群岛",
+					"460323": "中沙群岛的岛礁及其海域",
 					"460324": "永乐群岛"
 				}
 			},
@@ -4702,7 +4408,7 @@ module.exports = {
 				"districts": {
 					"511502": "翠屏区",
 					"511503": "南溪区",
-					"511521": "宜宾县",
+					"511504": "叙州区",
 					"511523": "江安县",
 					"511524": "长宁县",
 					"511525": "高县",
@@ -4936,7 +4642,7 @@ module.exports = {
 				"name": "黔西南布依族苗族自治州",
 				"districts": {
 					"522301": "兴义市",
-					"522322": "兴仁县",
+					"522302": "兴仁市",
 					"522323": "普安县",
 					"522324": "晴隆县",
 					"522325": "贞丰县",
@@ -5017,7 +4723,7 @@ module.exports = {
 				"districts": {
 					"530302": "麒麟区",
 					"530303": "沾益区",
-					"530321": "马龙县",
+					"530304": "马龙区",
 					"530322": "陆良县",
 					"530323": "师宗县",
 					"530324": "罗平县",
@@ -5066,7 +4772,7 @@ module.exports = {
 					"530627": "镇雄县",
 					"530628": "彝良县",
 					"530629": "威信县",
-					"530630": "水富县"
+					"530681": "水富市"
 				}
 			},
 			"530700": {
@@ -5598,9 +5304,9 @@ module.exports = {
 					"620821": "泾川县",
 					"620822": "灵台县",
 					"620823": "崇信县",
-					"620824": "华亭县",
 					"620825": "庄浪县",
-					"620826": "静宁县"
+					"620826": "静宁县",
+					"620881": "华亭市"
 				}
 			},
 			"620900": {
@@ -5778,6 +5484,7 @@ module.exports = {
 				"districts": {
 					"632801": "格尔木市",
 					"632802": "德令哈市",
+					"632803": "茫崖市",
 					"632821": "乌兰县",
 					"632822": "都兰县",
 					"632823": "天峻县"
@@ -6029,235 +5736,6 @@ module.exports = {
 			}
 		}
 	},
-	"710000": {
-		"code": "710000",
-		"name": "台湾省",
-		"cities": {
-			"710100": {
-				"code": "710100",
-				"name": "台北市",
-				"districts": {
-					"710101": "中正区",
-					"710102": "大同区",
-					"710103": "中山区",
-					"710104": "万华区",
-					"710105": "信义区",
-					"710106": "松山区",
-					"710107": "大安区",
-					"710108": "南港区",
-					"710109": "北投区",
-					"710110": "内湖区",
-					"710111": "士林区",
-					"710112": "文山区"
-				}
-			},
-			"710200": {
-				"code": "710200",
-				"name": "新北市",
-				"districts": {
-					"710201": "板桥区",
-					"710202": "土城区",
-					"710203": "新庄区",
-					"710204": "新店区",
-					"710205": "深坑区",
-					"710206": "石碇区",
-					"710207": "坪林区",
-					"710208": "乌来区",
-					"710209": "五股区",
-					"710210": "八里区",
-					"710211": "林口区",
-					"710212": "淡水区",
-					"710213": "中和区",
-					"710214": "永和区",
-					"710215": "三重区",
-					"710216": "芦洲区",
-					"710217": "泰山区",
-					"710218": "树林区",
-					"710219": "莺歌区",
-					"710220": "三峡区",
-					"710221": "汐止区",
-					"710222": "金山区",
-					"710223": "万里区",
-					"710224": "三芝区",
-					"710225": "石门区",
-					"710226": "瑞芳区",
-					"710227": "贡寮区",
-					"710228": "双溪区",
-					"710229": "平溪区"
-				}
-			},
-			"710300": {
-				"code": "710300",
-				"name": "桃园市",
-				"districts": {
-					"710301": "桃园区",
-					"710302": "中坜区",
-					"710303": "平镇区",
-					"710304": "八德区",
-					"710305": "杨梅区",
-					"710306": "芦竹区",
-					"710307": "大溪区",
-					"710308": "龙潭区",
-					"710309": "龟山区",
-					"710310": "大园区",
-					"710311": "观音区",
-					"710312": "新屋区",
-					"710313": "复兴区"
-				}
-			},
-			"710400": {
-				"code": "710400",
-				"name": "台中市",
-				"districts": {
-					"710401": "中区",
-					"710402": "东区",
-					"710403": "西区",
-					"710404": "南区",
-					"710405": "北区",
-					"710406": "西屯区",
-					"710407": "南屯区",
-					"710408": "北屯区",
-					"710409": "丰原区",
-					"710410": "大里区",
-					"710411": "太平区",
-					"710412": "东势区",
-					"710413": "大甲区",
-					"710414": "清水区",
-					"710415": "沙鹿区",
-					"710416": "梧栖区",
-					"710417": "后里区",
-					"710418": "神冈区",
-					"710419": "潭子区",
-					"710420": "大雅区",
-					"710421": "新小区",
-					"710422": "石冈区",
-					"710423": "外埔区",
-					"710424": "大安区",
-					"710425": "乌日区",
-					"710426": "大肚区",
-					"710427": "龙井区",
-					"710428": "雾峰区",
-					"710429": "和平区"
-				}
-			},
-			"710500": {
-				"code": "710500",
-				"name": "台南市",
-				"districts": {
-					"710501": "中西区",
-					"710502": "东区",
-					"710503": "南区",
-					"710504": "北区",
-					"710505": "安平区",
-					"710506": "安南区",
-					"710507": "永康区",
-					"710508": "归仁区",
-					"710509": "新化区",
-					"710510": "左镇区",
-					"710511": "玉井区",
-					"710512": "楠西区",
-					"710513": "南化区",
-					"710514": "仁德区",
-					"710515": "关庙区",
-					"710516": "龙崎区",
-					"710517": "官田区",
-					"710518": "麻豆区",
-					"710519": "佳里区",
-					"710520": "西港区",
-					"710521": "七股区",
-					"710522": "将军区",
-					"710523": "学甲区",
-					"710524": "北门区",
-					"710525": "新营区",
-					"710526": "后壁区",
-					"710527": "白河区",
-					"710528": "东山区",
-					"710529": "六甲区",
-					"710530": "下营区",
-					"710531": "柳营区",
-					"710532": "盐水区",
-					"710533": "善化区",
-					"710534": "大内区",
-					"710535": "山上区",
-					"710536": "新市区",
-					"710537": "安定区"
-				}
-			},
-			"710600": {
-				"code": "710600",
-				"name": "高雄市",
-				"districts": {
-					"710601": "楠梓区",
-					"710602": "左营区",
-					"710603": "鼓山区",
-					"710604": "三民区",
-					"710605": "盐埕区",
-					"710606": "前金区",
-					"710607": "新兴区",
-					"710608": "苓雅区",
-					"710609": "前镇区",
-					"710610": "旗津区",
-					"710611": "小港区",
-					"710612": "凤山区",
-					"710613": "大寮区",
-					"710614": "鸟松区",
-					"710615": "林园区",
-					"710616": "仁武区",
-					"710617": "大树区",
-					"710618": "大社区",
-					"710619": "冈山区",
-					"710620": "路竹区",
-					"710621": "桥头区",
-					"710622": "梓官区",
-					"710623": "弥陀区",
-					"710624": "永安区",
-					"710625": "燕巢区",
-					"710626": "阿莲区",
-					"710627": "茄萣区",
-					"710628": "湖内区",
-					"710629": "旗山区",
-					"710630": "美浓区",
-					"710631": "内门区",
-					"710632": "杉林区",
-					"710633": "甲仙区",
-					"710634": "六龟区",
-					"710635": "茂林区",
-					"710636": "桃源区",
-					"710637": "那玛夏区"
-				}
-			},
-			"710700": {
-				"code": "710700",
-				"name": "基隆市",
-				"districts": {
-					"710701": "中正区",
-					"710702": "七堵区",
-					"710703": "暖暖区",
-					"710704": "仁爱区",
-					"710705": "中山区",
-					"710706": "安乐区",
-					"710707": "信义区"
-				}
-			},
-			"710800": {
-				"code": "710800",
-				"name": "新竹市",
-				"districts": {
-					"710801": "东区",
-					"710802": "北区",
-					"710803": "香山区"
-				}
-			},
-			"710900": {
-				"code": "710900",
-				"name": "嘉义市",
-				"districts": {
-					"710901": "东区",
-					"710902": "西区"
-				}
-			}
-		}
-	},
 	"810000": {
 		"code": "810000",
 		"name": "香港特别行政区",
@@ -6305,6 +5783,235 @@ module.exports = {
 					"820107": "圣方济各堂区",
 					"820108": "路氹城",
 					"820109": "澳门新城"
+				}
+			}
+		}
+	},
+	"830000": {
+		"code": "830000",
+		"name": "台湾省",
+		"cities": {
+			"830100": {
+				"code": "830100",
+				"name": "台北市",
+				"districts": {
+					"830101": "中正区",
+					"830102": "大同区",
+					"830103": "中山区",
+					"830104": "万华区",
+					"830105": "信义区",
+					"830106": "松山区",
+					"830107": "大安区",
+					"830108": "南港区",
+					"830109": "北投区",
+					"830110": "内湖区",
+					"830111": "士林区",
+					"830112": "文山区"
+				}
+			},
+			"830200": {
+				"code": "830200",
+				"name": "新北市",
+				"districts": {
+					"830201": "板桥区",
+					"830202": "土城区",
+					"830203": "新庄区",
+					"830204": "新店区",
+					"830205": "深坑区",
+					"830206": "石碇区",
+					"830207": "坪林区",
+					"830208": "乌来区",
+					"830209": "五股区",
+					"830210": "八里区",
+					"830211": "林口区",
+					"830212": "淡水区",
+					"830213": "中和区",
+					"830214": "永和区",
+					"830215": "三重区",
+					"830216": "芦洲区",
+					"830217": "泰山区",
+					"830218": "树林区",
+					"830219": "莺歌区",
+					"830220": "三峡区",
+					"830221": "汐止区",
+					"830222": "金山区",
+					"830223": "万里区",
+					"830224": "三芝区",
+					"830225": "石门区",
+					"830226": "瑞芳区",
+					"830227": "贡寮区",
+					"830228": "双溪区",
+					"830229": "平溪区"
+				}
+			},
+			"830300": {
+				"code": "830300",
+				"name": "桃园市",
+				"districts": {
+					"830301": "桃园区",
+					"830302": "中坜区",
+					"830303": "平镇区",
+					"830304": "八德区",
+					"830305": "杨梅区",
+					"830306": "芦竹区",
+					"830307": "大溪区",
+					"830308": "龙潭区",
+					"830309": "龟山区",
+					"830310": "大园区",
+					"830311": "观音区",
+					"830312": "新屋区",
+					"830313": "复兴区"
+				}
+			},
+			"830400": {
+				"code": "830400",
+				"name": "台中市",
+				"districts": {
+					"830401": "中区",
+					"830402": "东区",
+					"830403": "西区",
+					"830404": "南区",
+					"830405": "北区",
+					"830406": "西屯区",
+					"830407": "南屯区",
+					"830408": "北屯区",
+					"830409": "丰原区",
+					"830410": "大里区",
+					"830411": "太平区",
+					"830412": "东势区",
+					"830413": "大甲区",
+					"830414": "清水区",
+					"830415": "沙鹿区",
+					"830416": "梧栖区",
+					"830417": "后里区",
+					"830418": "神冈区",
+					"830419": "潭子区",
+					"830420": "大雅区",
+					"830421": "新小区",
+					"830422": "石冈区",
+					"830423": "外埔区",
+					"830424": "大安区",
+					"830425": "乌日区",
+					"830426": "大肚区",
+					"830427": "龙井区",
+					"830428": "雾峰区",
+					"830429": "和平区"
+				}
+			},
+			"830500": {
+				"code": "830500",
+				"name": "台南市",
+				"districts": {
+					"830501": "中西区",
+					"830502": "东区",
+					"830503": "南区",
+					"830504": "北区",
+					"830505": "安平区",
+					"830506": "安南区",
+					"830507": "永康区",
+					"830508": "归仁区",
+					"830509": "新化区",
+					"830510": "左镇区",
+					"830511": "玉井区",
+					"830512": "楠西区",
+					"830513": "南化区",
+					"830514": "仁德区",
+					"830515": "关庙区",
+					"830516": "龙崎区",
+					"830517": "官田区",
+					"830518": "麻豆区",
+					"830519": "佳里区",
+					"830520": "西港区",
+					"830521": "七股区",
+					"830522": "将军区",
+					"830523": "学甲区",
+					"830524": "北门区",
+					"830525": "新营区",
+					"830526": "后壁区",
+					"830527": "白河区",
+					"830528": "东山区",
+					"830529": "六甲区",
+					"830530": "下营区",
+					"830531": "柳营区",
+					"830532": "盐水区",
+					"830533": "善化区",
+					"830534": "大内区",
+					"830535": "山上区",
+					"830536": "新市区",
+					"830537": "安定区"
+				}
+			},
+			"830600": {
+				"code": "830600",
+				"name": "高雄市",
+				"districts": {
+					"830601": "楠梓区",
+					"830602": "左营区",
+					"830603": "鼓山区",
+					"830604": "三民区",
+					"830605": "盐埕区",
+					"830606": "前金区",
+					"830607": "新兴区",
+					"830608": "苓雅区",
+					"830609": "前镇区",
+					"830610": "旗津区",
+					"830611": "小港区",
+					"830612": "凤山区",
+					"830613": "大寮区",
+					"830614": "鸟松区",
+					"830615": "林园区",
+					"830616": "仁武区",
+					"830617": "大树区",
+					"830618": "大社区",
+					"830619": "冈山区",
+					"830620": "路竹区",
+					"830621": "桥头区",
+					"830622": "梓官区",
+					"830623": "弥陀区",
+					"830624": "永安区",
+					"830625": "燕巢区",
+					"830626": "阿莲区",
+					"830627": "茄萣区",
+					"830628": "湖内区",
+					"830629": "旗山区",
+					"830630": "美浓区",
+					"830631": "内门区",
+					"830632": "杉林区",
+					"830633": "甲仙区",
+					"830634": "六龟区",
+					"830635": "茂林区",
+					"830636": "桃源区",
+					"830637": "那玛夏区"
+				}
+			},
+			"830700": {
+				"code": "830700",
+				"name": "基隆市",
+				"districts": {
+					"830701": "中正区",
+					"830702": "七堵区",
+					"830703": "暖暖区",
+					"830704": "仁爱区",
+					"830705": "中山区",
+					"830706": "安乐区",
+					"830707": "信义区"
+				}
+			},
+			"830800": {
+				"code": "830800",
+				"name": "新竹市",
+				"districts": {
+					"830801": "东区",
+					"830802": "北区",
+					"830803": "香山区"
+				}
+			},
+			"830900": {
+				"code": "830900",
+				"name": "嘉义市",
+				"districts": {
+					"830901": "东区",
+					"830902": "西区"
 				}
 			}
 		}
